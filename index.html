@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>An Online Multiplayer Rock, Paper, Scissors Game</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- RESET CSS -->
+    <link rel="stylesheet" type="text/css" media="screen" href="assets/css/reset.css" />
+    <link rel="stylesheet" type="text/css" media="screen" href="assets/css/styles.css" />
+    <script src="assets/js/app.js"></script>
+</head>
+
+<body>
+    <div class="grid-container">
+        <!-- START CSS GRID CONTAINER -->
+        <header class="title">Online Multiplayer Rock, Scissors, Paper Game!</header>
+
+        <div id="player1">Player 1: <span id="p1score">0</span> Points</div>
+        <div id="result">Game 1</div>
+        <div id="player2">Player 2: <span id="p2score">0</span> Points</div>
+
+        <div id="left-select">
+            <h4>Your Selection</h4>
+            <button id="rock1" class="select"><img src="assets/images/the_rock_headshot.png" alt"Rock"></button>
+            <button id="paper1" class="select"><img src="assets/images/paper.png" alt"Paper"></button>
+            <button id="scissors1" class="select"><img src="assets/images/Scissors.png" alt"Scissors"></button>
+        </div>
+
+        <div id="info">
+            <p>Game Feedback</p>
+        </div>
+
+        <div id="right-select">
+            <h4>Opponent's Selection</h4>
+            <button id="rock2" class="select"><img src="assets/images/the_rock_headshot.png" alt"Rock"></button>
+            <button id="paper2" class="select"><img src="assets/images/paper.png" alt"Paper"></button>
+            <button id="scissors2" class="select"><img src="assets/images/Scissors.png" alt"Scissors"></button>
+        </div>
+
+        <div id="chat">
+                <textarea id="chat-text" rows="8">
+Orlando: I'll beat you!
+Aidan: I won LOL!
+                </textarea>
+                <button id="submit">Send Msg</button>
+
+        </div>
+
+        <div id="history">
+            <h5>Game History</h5>
+            <ul>
+                <li>1/16/2019, 8pm: Orlando: 3 vs Aidan: 5</li>
+                <li>1/16/2019, 8pm: Orlando: 3 vs Aidan: 5</li>
+                <li>1/16/2019, 8pm: Orlando: 3 vs Aidan: 5</li>
+                <li>1/16/2019, 8pm: Orlando: 3 vs Aidan: 5</li>
+                <li>1/16/2019, 8pm: Orlando: 3 vs Aidan: 5</li>
+            </ul>
+            </footer>
+
+        </div> <!-- END CSS GRID CONTAINER -->
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+
+</body>
+
+</html>
