@@ -137,7 +137,7 @@ button>img {
         width: 100%;
         margin: 0 0;
     }
-    #p1image, #p2image {
+    #p1image > img, #p2image > img {
         width: 100%;
         height: auto;
         object-fit: cover;
