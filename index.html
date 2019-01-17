@@ -14,47 +14,56 @@
 </head>
 
 <body>
+    <!-- START CSS GRID CONTAINER -->
     <div class="grid-container">
-        <!-- START CSS GRID CONTAINER -->
+        
         <header class="title">Online Multiplayer Rock, Scissors, Paper Game!</header>
 
-        <div id="player1">Player 1: <span id="p1score">0</span> Points</div>
-        <div id="info">
-            <div id="round-title"><h2>Round <span id="round">3</span></h2></div>
-            <div id="p1image">
-                <img src="assets/images/Scissors.png">
+        <main>
+            <div class="main-header">
+                <div id="player1">Player 1: <span id="p1score">0</span> Points</div>
+                <div id="round-title">
+                    <h2>Round <span id="round">3</span></h2>
+                </div>
+                <div id="player2">Player 2: <span id="p2score">0</span> Points</div>
             </div>
-            
-            <div id="vs">vs</div>
 
-            <div id="p2image">
-                <img src="assets/images/the_rock_headshot.png">
+            <div class="selection">
+                <div id="left-select">
+                    <h4>Your Selection</h4>
+                    <button id="rock1" class="select"><img src="assets/images/the_rock_headshot.png" alt"Rock"></button>
+                    <button id="paper1" class="select"><img src="assets/images/paper.png" alt"Paper"></button>
+                    <button id="scissors1" class="select"><img src="assets/images/Scissors.png" alt"Scissors"></button>
+                </div>
+                <div id="info">
+                    <div id="vs">vs</div>
+                </div>
+                <div id="right-select">
+                    <h4>Opponent's Selection</h4>
+                    <button id="rock2" class="select"><img src="assets/images/the_rock_headshot.png" alt"Rock"></button>
+                    <button id="paper2" class="select"><img src="assets/images/paper.png" alt"Paper"></button>
+                    <button id="scissors2" class="select"><img src="assets/images/Scissors.png" alt"Scissors"></button>
+                </div>
+
+                <div id="p1image">
+                    <img src="assets/images/Scissors.png">
+                    <div class="p1status">Loser!</div>
+                </div>
+
+                <div id="p2image">
+                    <img src="assets/images/the_rock_headshot.png">
+                    <div class="p2status">Winner!</div>
+                </div>
             </div>
-            
-
-        </div>
-        <div id="player2">Player 2: <span id="p2score">0</span> Points</div>
-
-        <div id="left-select">
-            <h4>Your Selection</h4>
-            <button id="rock1" class="select"><img src="assets/images/the_rock_headshot.png" alt"Rock"></button>
-            <button id="paper1" class="select"><img src="assets/images/paper.png" alt"Paper"></button>
-            <button id="scissors1" class="select"><img src="assets/images/Scissors.png" alt"Scissors"></button>
-        </div>
-
-        <div id="right-select">
-            <h4>Opponent's Selection</h4>
-            <button id="rock2" class="select"><img src="assets/images/the_rock_headshot.png" alt"Rock"></button>
-            <button id="paper2" class="select"><img src="assets/images/paper.png" alt"Paper"></button>
-            <button id="scissors2" class="select"><img src="assets/images/Scissors.png" alt"Scissors"></button>
-        </div>
+        </main>
 
         <div id="chat">
-                <textarea id="chat-text" rows="6">
+            <textarea id="chat-text" rows="5">
 Orlando: I'll beat you!
 Aidan: I won LOL!
                 </textarea>
-                <button id="submit">Send Msg</button>
+                <input type="text" id="input-text" placeholder="Type Here">
+            <button id="submit">Send Msg</button>
 
         </div>
 
@@ -67,11 +76,14 @@ Aidan: I won LOL!
                 <li>1/16/2019, 8pm: Orlando: 3 vs Aidan: 5</li>
                 <li>1/16/2019, 8pm: Orlando: 3 vs Aidan: 5</li>
             </ul>
-            </footer>
 
-        </div> <!-- END CSS GRID CONTAINER -->
 
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+        </div>
+        <footer>
+            <a href="orlandocarnate.github.io">Orlando Carnate</a> 2019
+        </footer>
+    </div> <!-- END CSS GRID CONTAINER -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 
 
 </body>
