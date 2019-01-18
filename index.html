@@ -4,19 +4,22 @@
 <head>
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width">
     <title>An Online Multiplayer Rock, Paper, Scissors Game</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <!-- RESET CSS -->
     <link rel="stylesheet" type="text/css" media="screen" href="assets/css/reset.css" />
     <link rel="stylesheet" type="text/css" media="screen" href="assets/css/styles.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <!-- <script src="https://www.gstatic.com/firebasejs/5.8.0/firebase.js"></script> -->
+    <!-- FIREBASE API -->
     <script src="assets/js/app.js"></script>
 </head>
 
 <body>
     <!-- START CSS GRID CONTAINER -->
     <div class="grid-container">
-        
         <header class="title">Online Multiplayer Rock, Scissors, Paper Game!</header>
 
         <main>
@@ -31,18 +34,18 @@
             <div class="selection">
                 <div id="left-select">
                     <h4>Your Selection</h4>
-                    <button id="rock1" class="select"><img src="assets/images/the_rock_headshot.png" alt"Rock"></button>
-                    <button id="paper1" class="select"><img src="assets/images/paper.png" alt"Paper"></button>
-                    <button id="scissors1" class="select"><img src="assets/images/Scissors.png" alt"Scissors"></button>
+                    <button value="rock" class="p1select"><img src="assets/images/the_rock_headshot.png" alt"Rock"></button>
+                    <button value="paper" class="p1select"><img src="assets/images/paper.png" alt"Paper"></button>
+                    <button value="scissors" class="p1select"><img src="assets/images/Scissors.png" alt"Scissors"></button>
                 </div>
                 <div id="info">
-                    <div id="vs">vs</div>
+                    <div id="vs"><button id="check-winner">vs</button></div>
                 </div>
                 <div id="right-select">
                     <h4>Opponent's Selection</h4>
-                    <button id="rock2" class="select"><img src="assets/images/the_rock_headshot.png" alt"Rock"></button>
-                    <button id="paper2" class="select"><img src="assets/images/paper.png" alt"Paper"></button>
-                    <button id="scissors2" class="select"><img src="assets/images/Scissors.png" alt"Scissors"></button>
+                    <button value="rock" class="p2select"><img src="assets/images/the_rock_headshot.png" alt"Rock"></button>
+                    <button value="paper" class="p2select"><img src="assets/images/paper.png" alt"Paper"></button>
+                    <button value="scissors" class="p2select"><img src="assets/images/Scissors.png" alt"Scissors"></button>
                 </div>
 
                 <div id="p1image">
@@ -61,9 +64,9 @@
             <textarea id="chat-text" rows="5">
 Orlando: I'll beat you!
 Aidan: I won LOL!
-                </textarea>
-                <input type="text" id="input-text" placeholder="Type Here">
-            <button id="submit">Send Msg</button>
+            </textarea>
+            <input type="text" id="chat-text" placeholder="Type Here">
+            <button id="submit">Send Msg</button><button id="submit">Random Taunt</button>
 
         </div>
 
