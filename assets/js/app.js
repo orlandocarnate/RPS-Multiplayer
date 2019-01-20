@@ -121,8 +121,8 @@ $(document).ready(function () {
                     $(".p2status").html("DRAW!");
                 }
             };
-            rpsGame.showCard("#p1image", pics[p1item]);
-            rpsGame.showCard("#p2image", pics[p2item]);
+            rpsGame.showCard("#p1image", pics[item]);
+            rpsGame.showCard("#p2image", pics[item]);
 
             // reset flags
             p1flag = false;
