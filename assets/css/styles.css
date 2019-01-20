@@ -3,14 +3,18 @@ body {
     background-image: url("../images/seamless_paper_texture.png");
     font: .75em 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
 }
-
-h2 {
+.title {
     font-size: 2em;
+}
+h2 {
+    font-size: 20em;
     text-align: center;
 }
 
 h4 {
     margin-bottom: 5px;
+    text-align: center;
+    font-size: 1.25em;
 }
 
 li {
@@ -22,14 +26,15 @@ header, footer, aside, section, #left-select, #right-select, #p1image, #p2image,
     border: solid 2px black;
     border-radius: 5px;
     padding: 5px;
-    margin-bottom: 5px;
 }
 
 .grid-container {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    width: 80em;
+    width: 70em;
     margin: 0 auto;
+    grid-column-gap: 5px;
+    grid-row-gap: 5px;
 }
 
 header, #scoreboard, main, footer {
@@ -47,12 +52,20 @@ header, #scoreboard, main, footer {
     grid-template-columns: 1fr 1fr;
 }
 
-#left-select, #player1 {
+#left-select {
     grid-column: 1/2;
+
 }
 
-#right-select, #player2 {
+#right-select {
     grid-column: 2/3;
+
+}
+
+.player-btns {
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 #p1image, #vs, #p2image {
@@ -77,18 +90,25 @@ header, #scoreboard, main, footer {
 }
 
 #chat {
-    grid-column: 1/2;
+    box-sizing: border-box;
+    grid-column: 1/3;
     padding: 5px 10px;
+    height: 15em;
+}
+#chat > input {
+    box-sizing: border-box;
 }
 
-.dispblock {
+/* .dispblock {
     clear: both;
     display: block;
-}
+} */
 
 #history {
+    box-sizing: border-box;
     grid-column: 2/3;
-    font-size: .5em;
+    max-height: 15em;
+    overflow-y: scroll;
 }
 
 .select {
@@ -118,21 +138,44 @@ button > img {
     color: rgb(0, 255, 0);
     font-family: 'Courier New', Courier, monospace;
     text-align: left;
+    height: 10em;
+    overflow-y: scroll;
+    margin-bottom: 5px;
+}
+
+#input-section {
+    display: flex;
+    justify-content: flex-end;
 }
 
 #input-text {
+    width: 100%;
+    height: 3em;
     box-sizing: border-box;
 }
 
-#submit, #chat-text, #input-text {
-    width: 100%;
+#submit {
+    width: 10em;
+    height: 3em;
+    box-sizing: border-box;
 }
-
 /* footer {
     text-align: center;
 } */
 
 @media only screen and (max-width: 768px) {
+    .grid-container {
+        width: 60em;
+        margin: 0 auto;
+    }
+    #p1image>img, #p2image>img {
+        width: 100%;
+        height: auto;
+        object-fit: cover;
+    }
+}
+
+@media only screen and (max-width: 480px) {
     .grid-container {
         width: 100%;
         margin: 0 0;

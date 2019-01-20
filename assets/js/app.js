@@ -7,6 +7,7 @@ $(document).ready(function () {
         rock: "assets/images/the_rock_headshot.png",
         paper: "assets/images/paper.png",
         scissors: "assets/images/Scissors.png",
+        q: "assets/images/question.png",
         gif: "https://thumbs.gfycat.com/RegalAssuredGossamerwingedbutterfly-max-1mb.gif"
     };
 
@@ -33,8 +34,8 @@ $(document).ready(function () {
     $(".p1select").on("click", function (event) {
         event.preventDefault();
         p1item = $(this).val();
-        console.log("P1 chose " + p1item);
-        rpsGame.showCard("#p1image", pics[p1item]);
+        rpsGame.showCard("#p1image", pics["q"]);
+        rpsGame.showCard("#p2image", pics["q"]);
         p1flag = true;
 
         // save data to Firebase RTDB
@@ -48,8 +49,9 @@ $(document).ready(function () {
     $(".p2select").on("click", function (event) {
         event.preventDefault();
         p2item = $(this).val();
+        rpsGame.showCard("#p1image", pics["q"]);
+        rpsGame.showCard("#p2image", pics["q"]);
         console.log("P2 chose " + p2item);
-        rpsGame.showCard("#p2image", pics[p2item]);
         p2flag = true;
         $(".p2select").addClass("btn-opacity").attr("disabled", true); // disable p2 buttons
         // save data to Firebase RTDB
@@ -67,10 +69,10 @@ $(document).ready(function () {
     // if player presses chat submit button
     $("#submit").on("click", function(event) {
         event.preventDefault();
-        var chatText = $("#chat-text").val().trim();
+        var chatText = $("#input-text").val().trim();
         if (chatText !== "") {
             rpsGame.updateChat(chatText);
-            $("#chat-text").val("");
+            $("#input-text").val("");
         }
 
     });
@@ -119,6 +121,8 @@ $(document).ready(function () {
                     $(".p2status").html("DRAW!");
                 }
             };
+            this.showCard("#p1image", pics[p1item]);
+            this.showCard("#p2image", pics[p2item]);
 
             // reset flags
             p1flag = false;
