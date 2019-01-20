@@ -17,7 +17,7 @@ $(document).ready(function () {
 
     // FIREBASE API
     var config = {
-        apiKey: mine,
+        apiKey: "AIzaSyA6MnePmIsN9caVZaX1GQGt1dRkh-8MBTc",
         authDomain: "rps-game-148d6.firebaseapp.com",
         databaseURL: "https://rps-game-148d6.firebaseio.com",
         projectId: "rps-game-148d6",
