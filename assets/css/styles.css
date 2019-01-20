@@ -165,7 +165,7 @@ button > img {
 
 @media only screen and (max-width: 768px) {
     .grid-container {
-        width: 60em;
+        max-width: 60em;
         margin: 0 auto;
     }
     #p1image>img, #p2image>img {

@@ -121,8 +121,8 @@ $(document).ready(function () {
                     $(".p2status").html("DRAW!");
                 }
             };
-            this.showCard("#p1image", pics[p1item]);
-            this.showCard("#p2image", pics[p2item]);
+            rpsGame.showCard("#p1image", pics[p1item]);
+            rpsGame.showCard("#p2image", pics[p2item]);
 
             // reset flags
             p1flag = false;
@@ -159,6 +159,7 @@ $(document).ready(function () {
 
     // if p1flag and p2flag are TRUE run the rpsGame.checkWinner() method. 
     database.ref("/status").on("value", function (snapshot) {
+        console.log("/status changed");
         // Log everything that's coming out of snapshot
         var flag1 = snapshot.child("p1").val().p1flag;
         var item1 = snapshot.child("p1").val().p1item;
