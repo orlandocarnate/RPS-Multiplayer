@@ -1,9 +1,8 @@
 body {
     box-sizing: border-box;
-    background-color: black;
+    background-image: url("../images/seamless_paper_texture.png");
     font: .75em 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
 }
-
 
 h2 {
     font-size: 2em;
@@ -14,13 +13,16 @@ h4 {
     margin-bottom: 5px;
 }
 
-header, footer, aside, section, div {
+li {
+    list-style: none;
+}
+header, footer, aside, section, #left-select, #right-select, #p1image, #p2image, #chat, #history {
     box-sizing: border-box;
     background-color: white;
     border: solid 2px black;
     border-radius: 5px;
     padding: 5px;
-    margin: 5px;
+    margin-bottom: 5px;
 }
 
 .grid-container {
@@ -28,7 +30,6 @@ header, footer, aside, section, div {
     grid-template-columns: 1fr 1fr;
     width: 80em;
     margin: 0 auto;
-    background-color: black;
 }
 
 header, #scoreboard, main, footer {
@@ -43,23 +44,15 @@ header, #scoreboard, main, footer {
 
 .selection {
     display: grid;
-    grid-template-columns: 3fr 1fr 3fr;
+    grid-template-columns: 1fr 1fr;
 }
 
 #left-select, #player1 {
     grid-column: 1/2;
 }
 
-#info {
-    grid-column: 2/3;
-    grid-row: 1/5;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
 #right-select, #player2 {
-    grid-column: 3/4;
+    grid-column: 2/3;
 }
 
 #p1image, #vs, #p2image {
@@ -73,12 +66,8 @@ header, #scoreboard, main, footer {
     grid-column: 1/2;
 }
 
-#vs {
-    /* grid-column: 2/3; */
-}
-
 #p2image {
-    grid-column: 3/4;
+    grid-column: 2/3;
 }
 
 .p1image, .p2image {
@@ -106,14 +95,23 @@ header, #scoreboard, main, footer {
     border-radius: 25%;
 }
 
-button>img {
+.p1select, .p2select {
+    border-radius: 10px;
+    margin: 5px;
+}
+button > img {
     width: 32px;
     height: 32px;
     object-fit: cover;
 }
 
-#chat-text {
+.btn-opacity {
+    opacity: 0.5;
+}
+
+#chat-box {
     box-sizing: border-box;
+    width: 100%;
     resize: none;
     /* margin-right: 15px; */
     background-color: black;
@@ -121,9 +119,11 @@ button>img {
     font-family: 'Courier New', Courier, monospace;
     text-align: left;
 }
+
 #input-text {
     box-sizing: border-box;
 }
+
 #submit, #chat-text, #input-text {
     width: 100%;
 }
@@ -137,7 +137,7 @@ button>img {
         width: 100%;
         margin: 0 0;
     }
-    #p1image > img, #p2image > img {
+    #p1image>img, #p2image>img {
         width: 100%;
         height: auto;
         object-fit: cover;

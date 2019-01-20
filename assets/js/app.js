@@ -6,12 +6,11 @@ $(document).ready(function () {
     var pics = {
         rock: "assets/images/the_rock_headshot.png",
         paper: "assets/images/paper.png",
-        scissors: "assets/images/Scissors.png"
+        scissors: "assets/images/Scissors.png",
+        gif: "https://thumbs.gfycat.com/RegalAssuredGossamerwingedbutterfly-max-1mb.gif"
     };
-    var p1score = 0;
-    var p2score = 0;
+
     var p1item, p2item;
-    var currentUser;
     var p1flag = false;
     var p2flag = false;
 
@@ -26,6 +25,7 @@ $(document).ready(function () {
     };
     firebase.initializeApp(config); // Initialize Firebase
     
+    console.log("UserInfo: ",firebase.UserInfo);
     // Create a variable to reference the database.
     var database = firebase.database();
 
@@ -36,8 +36,11 @@ $(document).ready(function () {
         console.log("P1 chose " + p1item);
         rpsGame.showCard("#p1image", pics[p1item]);
         p1flag = true;
-        database.ref().push({
+
+        // save data to Firebase RTDB
+        database.ref("/status/p1").set({
             p1flag: p1flag,
+            p1item: p1item
         });
     });
 
@@ -48,8 +51,11 @@ $(document).ready(function () {
         console.log("P2 chose " + p2item);
         rpsGame.showCard("#p2image", pics[p2item]);
         p2flag = true;
-        database.ref().push({
+        $(".p2select").addClass("btn-opacity").attr("disabled", true); // disable p2 buttons
+        // save data to Firebase RTDB
+        database.ref("/status/p2").set({
             p2flag: p2flag,
+            p2item: p2item
         });
     });
 
@@ -62,48 +68,51 @@ $(document).ready(function () {
     $("#submit").on("click", function(event) {
         event.preventDefault();
         var chatText = $("#chat-text").val().trim();
-        rpsGame.updateChat(chatText);
+        if (chatText !== "") {
+            rpsGame.updateChat(chatText);
+            $("#chat-text").val("");
+        }
+
     });
 
-    // if game is idle (no one is playing) for more than 5 minutes game is over.
 
     // rps game object
     var rpsGame = {
         // compare player 1 and 2 selections and see who the winner is
-        checkWinner: function (p1, p2) {
+        checkWinner: function (item1, item2) {
+            console.log("Checking Winner Param: ",item1, item2)
             // check if p1 and p2 are not empty
-            console.log(p1, p2);
-            if (p1 !== undefined && p2 !== undefined) {
-                if (p1 === "rock" && p2 === "scissors") {
+            if (item1 !== undefined && item2 !== undefined) {
+                if (item1 === "rock" && item2 === "scissors") {
                     $(".p1status").html("Winner!");
                     $(".p2status").html("Loser!");
                     console.log("P1 WINS!");
-                    p1score++;
-                } else if (p1 === "paper" && p2 === "rock") {
+                    // p1score++;
+                } else if (item1 === "paper" && item2 === "rock") {
                     $(".p1status").html("Winner!");
                     $(".p2status").html("Loser!");
                     console.log("P1 WINS!");
-                    p1score++;
-                } else if (p1 === "scissors" && p2 === "paper") {
+                    // p1score++;
+                } else if (item1 === "scissors" && item2 === "paper") {
                     $(".p1status").html("Winner!");
                     $(".p2status").html("Loser!");
                     console.log("P1 WINS!");
-                    p1score++;
-                } else if (p2 === "rock" && p1 === "scissors") {
+                    // p1score++;
+                } else if (item2 === "rock" && item1 === "scissors") {
                     $(".p2status").html("Winner!");
                     $(".p1status").html("Loser!");
                     console.log("P2 WINS!");
-                    p2score++;
-                } else if (p2 === "paper" && p1 === "rock") {
+                    // p2score++;
+                } else if (item2 === "paper" && item1 === "rock") {
                     $(".p2status").html("Winner!");
                     $(".p1status").html("Loser!");
                     console.log("P2 WINS!");
-                    p2score++;
-                } else if (p2 === "scissors" && p1 === "paper") {
+                    // p2score++;
+                } else if (item2 === "scissors" && item1 === "paper") {
                     $(".p2status").html("Winner!");
                     $(".p1status").html("Loser!");
                     console.log("P2 WINS!");
-                    p2score++;
+                    // p2score++;
                 } else {
                     console.log("DRAW! TRY AGAIN!");
                     $(".p1status").html("DRAW!");
@@ -114,6 +123,14 @@ $(document).ready(function () {
             // reset flags
             p1flag = false;
             p2flag = false;
+            database.ref("/status/p1").set({
+                p1flag: p1flag,
+                p1item: ""
+            });
+            database.ref("/status/p2").set({
+                p2flag: p2flag,
+                p2item: ""
+            });
 
         },
 
@@ -125,12 +142,11 @@ $(document).ready(function () {
         },
 
         showCard: function (player, val) {
-            console.log("player, img ", player, val);
             $(player).children("img").attr({ "src": val });
         },
 
         updateChat: function (arg) {
-            database.ref().push({
+            database.ref("/chat").push({
                 chat: arg,
                 chatTimeStamp: firebase.database.ServerValue.TIMESTAMP
             });
@@ -138,19 +154,45 @@ $(document).ready(function () {
     };
 
     // if p1flag and p2flag are TRUE run the rpsGame.checkWinner() method. 
-    database.ref().on("child_added", function (snapshot) {
+    database.ref("/status").on("value", function (snapshot) {
         // Log everything that's coming out of snapshot
-        console.log(snapshot.val());
-        console.log(snapshot.val().p1flag);
-        console.log(snapshot.val().p2flag);
-        if (snapshot.val().p1flag === true && snapshot.val().p1flag === true) {
-            checkWinner(snapshot.val().p1flag, snapshot.val().p2flag);
+        var flag1 = snapshot.child("p1").val().p1flag;
+        var item1 = snapshot.child("p1").val().p1item;
+        var flag2 = snapshot.child("p2").val().p2flag;
+        var item2 = snapshot.child("p2").val().p2item;
+        console.log("snaphot: ",snapshot.val());
+        console.log(flag1, item1, flag2, item2);
+        if (flag1 === true) {
+            $(".p1select").addClass("btn-opacity").attr("disabled", true); // disable p1 buttons
+        } else {
+            $(".p1select").removeClass("btn-opacity").attr("disabled", false);
+        }
+        if (flag2 === true) {
+            $(".p2select").addClass("btn-opacity").attr("disabled", true); // disable p1 buttons
+        } else {
+            $(".p2select").removeClass("btn-opacity").attr("disabled", false);
+        }
+        if (flag1 === true && flag2 === true) {
+            console.log("Checking Winner");
+            rpsGame.checkWinner(item1, item2);
         }
         // Handle the errors
     }, function (errorObject) {
         console.log("Errors handled: " + errorObject.code);
     });
 
+    // chat value listener
+    database.ref("/chat").limitToLast(5).on("child_added", function (childSnapshot) {
+        // Log everything that's coming out of snapshot
+        var chat = childSnapshot.val().chat;
+        console.log("chat snap: ", chat);
+        $("#chat-box").append("<li>" + chat + "</li>");
+        // Handle the errors
+    }, function (errorObject) {
+        console.log("Errors handled: " + errorObject.code);
+    });
+
+    
 
     //------ end ------
 });

@@ -24,53 +24,40 @@
 <body>
     <!-- START CSS GRID CONTAINER -->
     <div class="grid-container">
-        <header class="title">Online Multiplayer Rock, Scissors, Paper Game!</header>
+        <header class="title">Online Multiplayer Rock, Paper, Scissor Game!</header>
 
         <main>
-            <div class="main-header">
-                <div id="player1">Player 1: <span id="p1score">0</span> Points</div>
-                <div id="round-title">
-                    <h2>Round <span id="round">3</span></h2>
-                </div>
-                <div id="player2">Player 2: <span id="p2score">0</span> Points</div>
-            </div>
 
             <div class="selection">
                 <div id="left-select">
-                    <h4>Your Selection</h4>
+                    <h4>Player 1</h4>
                     <button value="rock" class="p1select"><img src="assets/images/the_rock_headshot.png" alt"Rock"></button>
                     <button value="paper" class="p1select"><img src="assets/images/paper.png" alt"Paper"></button>
                     <button value="scissors" class="p1select"><img src="assets/images/Scissors.png" alt"Scissors"></button>
                 </div>
-                <div id="info">
-                    <div id="vs"><button id="check-winner">vs</button></div>
-                </div>
                 <div id="right-select">
-                    <h4>Opponent's Selection</h4>
+                    <h4>Player 2</h4>
                     <button value="rock" class="p2select"><img src="assets/images/the_rock_headshot.png" alt"Rock"></button>
                     <button value="paper" class="p2select"><img src="assets/images/paper.png" alt"Paper"></button>
                     <button value="scissors" class="p2select"><img src="assets/images/Scissors.png" alt"Scissors"></button>
                 </div>
 
                 <div id="p1image">
-                    <img src="assets/images/Scissors.png">
-                    <div class="p1status">Loser!</div>
+                    <img src="assets/images/question.png">
+                    <div class="p1status"></div>
                 </div>
 
                 <div id="p2image">
-                    <img src="assets/images/the_rock_headshot.png">
-                    <div class="p2status">Winner!</div>
+                    <img src="assets/images/question.png">
+                    <div class="p2status"></div>
                 </div>
             </div>
         </main>
 
         <div id="chat">
-            <textarea id="chat-box" rows="5">
-Orlando: I'll beat you!
-Aidan: I won LOL!
-            </textarea>
+            <div id="chat-box"></div>
             <input type="text" id="chat-text" placeholder="Type Here">
-            <button id="submit">Send Msg</button><button id="submit">Random Taunt</button>
+            <button id="submit">Send Msg</button>
 
         </div>
 
