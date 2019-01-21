@@ -5,7 +5,7 @@ body {
 }
 
 .title {
-    font-size: 2em;
+    font-size: 2.5em;
 }
 
 h2 {
@@ -21,6 +21,10 @@ h4 {
 
 li {
     list-style: none;
+    font-size: 2em;
+}
+.chat-time {
+    font-size: .5em;
 }
 
 header, footer, aside, section, #left-select, #right-select, #p1image, #p2image, #chat, #history {
@@ -30,6 +34,14 @@ header, footer, aside, section, #left-select, #right-select, #p1image, #p2image,
     border-radius: 5px;
     padding: 5px;
 }
+
+/* #left-select, #p1image  {
+    background-color: rgb(74, 74, 255);
+}
+
+#right-select, #p2image {
+    background-color: rgb(255, 107, 107);
+} */
 
 .grid-container {
     display: grid;
@@ -123,9 +135,19 @@ header, #scoreboard, main, footer {
 }
 
 button>img {
-    width: 32px;
-    height: 32px;
+    width: 64px;
+    height: 64px;
     object-fit: cover;
+}
+
+.pickedImage {
+    width: 20em;
+    height: 20em;
+    object-fit: cover;
+}
+
+.p1status, .p2status {
+    font-size: 2em;
 }
 
 .btn-opacity {
@@ -144,6 +166,11 @@ button>img {
     height: 10em;
     overflow-y: scroll;
     margin-bottom: 5px;
+    /* display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    align-items: flex-end; */
+
 }
 
 #input-section {
@@ -211,8 +238,8 @@ button>img {
         margin: 0 auto;
     }
     #p1image>img, #p2image>img {
-        width: 100%;
-        height: auto;
+        width: 15em;
+        height: 15em;
         object-fit: cover;
     }
 }
@@ -223,8 +250,8 @@ button>img {
         margin: 0 0;
     }
     #p1image>img, #p2image>img {
-        width: 100%;
-        height: auto;
+        width: 10em;
+        height: 10em;
         object-fit: cover;
     }
 }

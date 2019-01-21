@@ -3,6 +3,7 @@ $(document).ready(function () {
 
     // declare variable
     var name; // localStorage variable
+    var timeFormat = "MM/DD/YYYY"; // time format variable for Moment.JS
 
     // get localStorage if exists
     if (typeof localStorage["myName"] !== 'undefined') {
@@ -145,9 +146,11 @@ $(document).ready(function () {
         },
 
         updateChat: function (arg) {
+            var currentTime = moment().unix();
+            console.log("moment():", currentTime);
             database.ref("/chat").push({
                 chat: arg,
-                chatTimeStamp: firebase.database.ServerValue.TIMESTAMP
+                chatTimeStamp: currentTime,
             });
         }
     };
@@ -182,11 +185,14 @@ $(document).ready(function () {
     });
 
     // chat value listener
-    database.ref("/chat").limitToLast(5).on("child_added", function (childSnapshot) {
+    database.ref("/chat").limitToLast(20).on("child_added", function (childSnapshot) {
         // Log everything that's coming out of snapshot
         var chat = childSnapshot.val().chat;
-        console.log("chat snap: ", chat);
-        $("#chat-box").append("<li>" + chat + "</li>");
+        var chatTime = childSnapshot.val().chatTimeStamp;
+        var convertedTime = moment(chatTime, "X").format("MM/DD/YY hh:mm:ss");
+        console.log("chat time: ", convertedTime);
+        $("#chat-box").append("<li><span class='chat-time'>(" + convertedTime + ")</span> " + chat + "</li>");
+        $("#chat-box").animate({scrollTop: $("#chat-box")[0].scrollHeight});
         // Handle the errors
     }, function (errorObject) {
         console.log("Errors handled: " + errorObject.code);
