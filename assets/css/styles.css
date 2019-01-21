@@ -3,9 +3,11 @@ body {
     background-image: url("../images/seamless_paper_texture.png");
     font: .75em 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
 }
+
 .title {
     font-size: 2em;
 }
+
 h2 {
     font-size: 20em;
     text-align: center;
@@ -20,6 +22,7 @@ h4 {
 li {
     list-style: none;
 }
+
 header, footer, aside, section, #left-select, #right-select, #p1image, #p2image, #chat, #history {
     box-sizing: border-box;
     background-color: white;
@@ -54,12 +57,10 @@ header, #scoreboard, main, footer {
 
 #left-select {
     grid-column: 1/2;
-
 }
 
 #right-select {
     grid-column: 2/3;
-
 }
 
 .player-btns {
@@ -95,7 +96,8 @@ header, #scoreboard, main, footer {
     padding: 5px 10px;
     height: 15em;
 }
-#chat > input {
+
+#chat>input {
     box-sizing: border-box;
 }
 
@@ -119,7 +121,8 @@ header, #scoreboard, main, footer {
     border-radius: 10px;
     margin: 5px;
 }
-button > img {
+
+button>img {
     width: 32px;
     height: 32px;
     object-fit: cover;
@@ -159,9 +162,48 @@ button > img {
     height: 3em;
     box-sizing: border-box;
 }
+
 /* footer {
     text-align: center;
 } */
+
+/* The Modal (background) */
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgb(0, 0, 0); /* Fallback color */
+    background-color: rgba(0, 0, 0, 0.4); /* Black w/ opacity */
+}
+
+/* Modal Content/Box */
+.modal-content {
+    background-color: #fefefe;
+    margin: 15% auto; /* 15% from the top and centered */
+    padding: 20px;
+    border: 1px solid #888;
+    width: 50%; /* Could be more or less, depending on screen size */
+    
+}
+
+/* The Close Button */
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close:hover, .close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
 
 @media only screen and (max-width: 768px) {
     .grid-container {

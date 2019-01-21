@@ -2,7 +2,17 @@ $(document).ready(function () {
     // ----- start -----
 
     // declare variable
-    var history = []; // game history that will retrieve data from Firebase
+    var name; // localStorage variable
+
+    // get localStorage if exists
+    if (typeof localStorage["myName"] !== 'undefined') {
+        name = localStorage["myName"];
+        console.log("localStorage['myName']: ", name);
+    } else {
+        name = "player";
+        console.log("no localStorage for myName");
+    };
+
     var pics = {
         rock: "assets/images/the_rock_headshot.png",
         paper: "assets/images/paper.png",
@@ -26,7 +36,6 @@ $(document).ready(function () {
     };
     firebase.initializeApp(config); // Initialize Firebase
     
-    console.log("UserInfo: ",firebase.UserInfo);
     // Create a variable to reference the database.
     var database = firebase.database();
 
@@ -61,22 +70,16 @@ $(document).ready(function () {
         });
     });
 
-    // temporary check winner button
-    $("#check-winner").on("click", function (event) {
-        rpsGame.checkWinner(p1item, p2item);
-    });
-
-    // if player presses chat submit button
+    // chat button
     $("#submit").on("click", function(event) {
         event.preventDefault();
         var chatText = $("#input-text").val().trim();
         if (chatText !== "") {
-            rpsGame.updateChat(chatText);
+            rpsGame.updateChat(name + ": " + chatText);
             $("#input-text").val("");
         }
 
     });
-
 
     // rps game object
     var rpsGame = {
@@ -135,14 +138,6 @@ $(document).ready(function () {
                 p2flag: p2flag,
                 p2item: ""
             });
-
-        },
-
-        // update footer w history data
-        history: function () {
-            // // load any saved values from Firebase to history array
-
-            // update DOM
         },
 
         showCard: function (player, val) {
@@ -197,7 +192,41 @@ $(document).ready(function () {
         console.log("Errors handled: " + errorObject.code);
     });
 
-    
+    // open Modal
+    $("#btnName").on("click", function(event) {
+        event.preventDefault();
+        $(".modal").css("display", "block");
+    });
+
+    // close Modal
+    $(".close").on("click", function() {
+        $(".modal").css("display", "none");
+    });
+
+    // get value for name then close modal
+    $("#submit-name").on("click", function(event) {
+        event.preventDefault();
+        if ($("#text-name").val() !== "") {
+            name = $("#text-name").val();
+            localStorage["myName"] = name;
+            console.log("Player name: ", name);
+            $(".modal").css("display", "none");
+        }
+    });
+
+    // close modal on Cancel
+    $("#cancel-name").on("click", function(event) {
+        event.preventDefault();
+        $(".modal").css("display", "none");
+    });
+
+    // // close Modal when clicked outside modal box
+    // $(document).on("click", function (event) {
+    //     if (event.target == modal) {
+    //         $(".modal").css("display", "none");
+    //     }
+    // })
+
 
     //------ end ------
 });

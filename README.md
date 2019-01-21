@@ -143,6 +143,8 @@ connectionsRef.on("value", function(snapshot) {
 
 ### Other Firebase Methods
 
+## CSS & JavaScript Modal
+* I created a CSS and JavaScript modal at [W3Schools.com](https://www.w3schools.com/howto/howto_css_modals.asp)
 
 ## Programming Notes
 * `<meta name="viewport" content="width=device-width">` is needed for Chrome to work with @media queries properly.
