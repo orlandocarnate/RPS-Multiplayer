@@ -3,7 +3,6 @@ $(document).ready(function () {
 
     // declare variable
     var name; // localStorage variable
-    var timeFormat = "MM/DD/YYYY"; // time format variable for Moment.JS
 
     // get localStorage if exists
     if (typeof localStorage["myName"] !== 'undefined') {
@@ -25,6 +24,8 @@ $(document).ready(function () {
     var p1item, p2item;
     var p1flag = false;
     var p2flag = false;
+    var p1score = 0;
+    var p2score = 0;
 
     // FIREBASE API
     var config = {
@@ -36,7 +37,7 @@ $(document).ready(function () {
         messagingSenderId: "472953467227"
     };
     firebase.initializeApp(config); // Initialize Firebase
-    
+
     // Create a variable to reference the database.
     var database = firebase.database();
 
@@ -72,7 +73,7 @@ $(document).ready(function () {
     });
 
     // chat button
-    $("#submit").on("click", function(event) {
+    $("#submit").on("click", function (event) {
         event.preventDefault();
         var chatText = $("#input-text").val().trim();
         if (chatText !== "") {
@@ -86,39 +87,39 @@ $(document).ready(function () {
     var rpsGame = {
         // compare player 1 and 2 selections and see who the winner is
         checkWinner: function (item1, item2) {
-            console.log("Checking Winner Param: ",item1, item2)
+            console.log("Checking Winner Param: ", item1, item2)
             // check if p1 and p2 are not empty
             if (item1 !== undefined && item2 !== undefined) {
                 if (item1 === "rock" && item2 === "scissors") {
                     $(".p1status").html("Winner!");
                     $(".p2status").html("Loser!");
                     console.log("P1 WINS!");
-                    // p1score++;
+                    this.updateP1Score();
                 } else if (item1 === "paper" && item2 === "rock") {
                     $(".p1status").html("Winner!");
                     $(".p2status").html("Loser!");
                     console.log("P1 WINS!");
-                    // p1score++;
+                    this.updateP1Score();
                 } else if (item1 === "scissors" && item2 === "paper") {
                     $(".p1status").html("Winner!");
                     $(".p2status").html("Loser!");
                     console.log("P1 WINS!");
-                    // p1score++;
+                    this.updateP1Score();
                 } else if (item2 === "rock" && item1 === "scissors") {
                     $(".p2status").html("Winner!");
                     $(".p1status").html("Loser!");
                     console.log("P2 WINS!");
-                    // p2score++;
+                    this.updateP2Score();
                 } else if (item2 === "paper" && item1 === "rock") {
                     $(".p2status").html("Winner!");
                     $(".p1status").html("Loser!");
                     console.log("P2 WINS!");
-                    // p2score++;
+                    this.updateP2Score();
                 } else if (item2 === "scissors" && item1 === "paper") {
                     $(".p2status").html("Winner!");
                     $(".p1status").html("Loser!");
                     console.log("P2 WINS!");
-                    // p2score++;
+                    this.updateP2Score();
                 } else {
                     console.log("DRAW! TRY AGAIN!");
                     $(".p1status").html("DRAW!");
@@ -152,7 +153,21 @@ $(document).ready(function () {
                 chat: arg,
                 chatTimeStamp: currentTime,
             });
-        }
+        },
+
+        updateP1Score: function () {
+            p1score++;
+            database.ref("/score/p1").set({
+                p1score: p1score,
+            });
+        },
+
+        updateP2Score: function () {
+            p2score++;
+            database.ref("/score/p2").set({
+                p2score: p2score,
+            });
+        },
     };
 
     // if p1flag and p2flag are TRUE run the rpsGame.checkWinner() method. 
@@ -163,7 +178,7 @@ $(document).ready(function () {
         var item1 = snapshot.child("p1").val().p1item;
         var flag2 = snapshot.child("p2").val().p2flag;
         var item2 = snapshot.child("p2").val().p2item;
-        console.log("snaphot: ",snapshot.val());
+        console.log("snaphot: ", snapshot.val());
         console.log(flag1, item1, flag2, item2);
         if (flag1 === true) {
             $(".p1select").addClass("btn-opacity").attr("disabled", true); // disable p1 buttons
@@ -192,25 +207,36 @@ $(document).ready(function () {
         var convertedTime = moment(chatTime, "X").format("MM/DD/YY hh:mm:ss");
         console.log("chat time: ", convertedTime);
         $("#chat-box").append("<li><span class='chat-time'>(" + convertedTime + ")</span> " + chat + "</li>");
-        $("#chat-box").animate({scrollTop: $("#chat-box")[0].scrollHeight});
+        $("#chat-box").animate({ scrollTop: $("#chat-box")[0].scrollHeight });
+        // Handle the errors
+    }, function (errorObject) {
+        console.log("Errors handled: " + errorObject.code);
+    });
+
+    // p1score value listener
+    database.ref("/score").on("value", function (childSnapshot) {
+        p1score = childSnapshot.child("p1").val().p1score;
+        p2score = childSnapshot.child("p2").val().p2score;
+        $(".p1score").text(p1score);
+        $(".p2score").text(p2score);
         // Handle the errors
     }, function (errorObject) {
         console.log("Errors handled: " + errorObject.code);
     });
 
     // open Modal
-    $("#btnName").on("click", function(event) {
+    $("#btnName").on("click", function (event) {
         event.preventDefault();
         $(".modal").css("display", "block");
     });
 
     // close Modal
-    $(".close").on("click", function() {
+    $(".close").on("click", function () {
         $(".modal").css("display", "none");
     });
 
     // get value for name then close modal
-    $("#submit-name").on("click", function(event) {
+    $("#submit-name").on("click", function (event) {
         event.preventDefault();
         if ($("#text-name").val() !== "") {
             name = $("#text-name").val();
@@ -221,7 +247,7 @@ $(document).ready(function () {
     });
 
     // close modal on Cancel
-    $("#cancel-name").on("click", function(event) {
+    $("#cancel-name").on("click", function (event) {
         event.preventDefault();
         $(".modal").css("display", "none");
     });
