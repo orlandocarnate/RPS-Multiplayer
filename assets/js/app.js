@@ -1,8 +1,21 @@
 $(document).ready(function () {
     // ----- start -----
 
-    // declare variable
+    // Global variables
     var name; // localStorage variable
+    var p1item, p2item;
+    var p1flag = false;
+    var p2flag = false;
+    var p1score = 0;
+    var p2score = 0;
+
+    var submitFX = document.createElement("audio");
+    var alert1 = document.createElement("audio");
+    var alert2 = document.createElement("audio");
+
+    submitFX.setAttribute("src", "assets/sounds/notify1.mp3");
+    alert1.setAttribute("src", "assets/sounds/alert1.mp3");
+    alert2.setAttribute("src", "assets/sounds/alert2.mp3");
 
     // get localStorage if exists
     if (typeof localStorage["myName"] !== 'undefined') {
@@ -21,11 +34,7 @@ $(document).ready(function () {
         gif: "https://thumbs.gfycat.com/RegalAssuredGossamerwingedbutterfly-max-1mb.gif"
     };
 
-    var p1item, p2item;
-    var p1flag = false;
-    var p2flag = false;
-    var p1score = 0;
-    var p2score = 0;
+
 
     // FIREBASE API
     var config = {
@@ -92,30 +101,23 @@ $(document).ready(function () {
             if (item1 !== undefined && item2 !== undefined) {
                 if (item1 === "rock" && item2 === "scissors") {
                     $("#status").html("<h2>Player 1 Wins!</h2>Rock Beats Scissors!");
-                    console.log("P1 WINS!");
                     this.updateP1Score();
                 } else if (item1 === "paper" && item2 === "rock") {
                     $("#status").html("<h2>Player 1 Wins!</h2>Paper Beats Rock!");
-                    console.log("P1 WINS!");
                     this.updateP1Score();
                 } else if (item1 === "scissors" && item2 === "paper") {
                     $("#status").html("<h2>Player 1 Wins!</h2>Scissors Beats Paper!");
-                    console.log("P1 WINS!");
                     this.updateP1Score();
                 } else if (item2 === "rock" && item1 === "scissors") {
                     $("#status").html("<h2>Player 2 Wins!</h2>Rock Beats Scissors!");
-                    console.log("P2 WINS!");
                     this.updateP2Score();
                 } else if (item2 === "paper" && item1 === "rock") {
                     $("#status").html("<h2>Player 2 Wins!</h2>Paper Beats Rock!");
-                    console.log("P2 WINS!");
                     this.updateP2Score();
                 } else if (item2 === "scissors" && item1 === "paper") {
                     $("#status").html("<h2>Player 2 Wins!</h2>Scissors Beats Paper!");
-                    console.log("P2 WINS!");
                     this.updateP2Score();
                 } else {
-                    console.log("DRAW! TRY AGAIN!");
                     $("#status").html("<h2>It's A DRAW!</h2>You both chose " + item1 + "!");
                 }
             };
@@ -163,22 +165,21 @@ $(document).ready(function () {
         },
     };
 
-    // if p1flag and p2flag are TRUE run the rpsGame.checkWinner() method. 
+    // FIREBASE Listner - if p1flag and p2flag are TRUE run the rpsGame.checkWinner() method. 
     database.ref("/status").on("value", function (snapshot) {
-        console.log("/status changed");
         // Log everything that's coming out of snapshot
         var flag1 = snapshot.child("p1").val().p1flag;
         var item1 = snapshot.child("p1").val().p1item;
         var flag2 = snapshot.child("p2").val().p2flag;
         var item2 = snapshot.child("p2").val().p2item;
-        console.log("snaphot: ", snapshot.val());
-        console.log(flag1, item1, flag2, item2);
         if (flag1 === true) {
+            alert1.play();
             $(".p1select").addClass("btn-opacity").attr("disabled", true); // disable p1 buttons
         } else {
             $(".p1select").removeClass("btn-opacity").attr("disabled", false);
         }
         if (flag2 === true) {
+            alert2.play();
             $(".p2select").addClass("btn-opacity").attr("disabled", true); // disable p1 buttons
         } else {
             $(".p2select").removeClass("btn-opacity").attr("disabled", false);
@@ -192,13 +193,14 @@ $(document).ready(function () {
         console.log("Errors handled: " + errorObject.code);
     });
 
-    // chat value listener
+    // chat FIREBASE listener
     database.ref("/chat").limitToLast(20).on("child_added", function (childSnapshot) {
         // Log everything that's coming out of snapshot
         var chat = childSnapshot.val().chat;
         var chatTime = childSnapshot.val().chatTimeStamp;
-        var convertedTime = moment(chatTime, "X").format("MM/DD/YY hh:mm:ss");
+        var convertedTime = moment(chatTime, "X").format("MM/DD hh:mm");
         console.log("chat time: ", convertedTime);
+        submitFX.play();
         $("#chat-box").append("<li><span class='chat-time'>(" + convertedTime + ")</span> " + chat + "</li>");
         $("#chat-box").animate({ scrollTop: $("#chat-box")[0].scrollHeight });
         // Handle the errors
@@ -206,7 +208,7 @@ $(document).ready(function () {
         console.log("Errors handled: " + errorObject.code);
     });
 
-    // p1score value listener
+    // p1score FIREBASE listener
     database.ref("/score").on("value", function (childSnapshot) {
         p1score = childSnapshot.child("p1").val().p1score;
         p2score = childSnapshot.child("p2").val().p2score;
