@@ -1,7 +1,7 @@
 body {
     box-sizing: border-box;
     background-image: url("../images/seamless_paper_texture.png");
-    font: .75em 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    font: 12ft 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
 }
 
 .title {
@@ -9,7 +9,7 @@ body {
 }
 
 h2 {
-    font-size: 20em;
+    font-size: 1.5em;
     text-align: center;
 }
 
@@ -27,7 +27,7 @@ li {
     font-size: .5em;
 }
 
-header, footer, aside, section, #left-select, #right-select, #p1image, #p2image, #chat, #history {
+header, footer, aside, section, #left-select, #right-select, main, #chat, #history {
     box-sizing: border-box;
     background-color: white;
     border: solid 2px black;
@@ -44,15 +44,16 @@ header, footer, aside, section, #left-select, #right-select, #p1image, #p2image,
 } */
 
 .grid-container {
+    /* box-sizing: border-box; */
     display: grid;
     grid-template-columns: 1fr 1fr;
-    width: 70em;
+    width: 80em;
     margin: 0 auto;
     grid-column-gap: 5px;
     grid-row-gap: 5px;
 }
 
-header, #scoreboard, main, footer {
+header, #scoreboard, footer {
     grid-column: 1/3;
     text-align: center;
 }
@@ -60,11 +61,6 @@ header, #scoreboard, main, footer {
 .main-header {
     display: flex;
     justify-content: space-evenly;
-}
-
-.selection {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
 }
 
 #left-select {
@@ -76,12 +72,21 @@ header, #scoreboard, main, footer {
 }
 
 .player-btns {
-    display: flex;
+    /* display: flex;
     justify-content: center;
-    align-items: center;
+    align-items: center; */
+    text-align: center;
 }
 
-#p1image, #vs, #p2image {
+main {
+    grid-column: 1/3;
+    display: grid;
+    grid-template-columns: 2fr 1fr 2fr;
+    grid-gap: 5px;
+    /* grid-auto-flow: row;  */
+}
+
+#p1image, #status, #p2image {
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -92,37 +97,20 @@ header, #scoreboard, main, footer {
     grid-column: 1/2;
 }
 
-#p2image {
+#status {
     grid-column: 2/3;
+    font-size: 2em;
+    text-align: center;
+}
+
+#p2image {
+    grid-column: 3/4;
 }
 
 .p1image, .p2image {
     width: 128px;
     height: 128px;
     object-fit: cover;
-}
-
-#chat {
-    box-sizing: border-box;
-    grid-column: 1/3;
-    padding: 5px 10px;
-    height: 15em;
-}
-
-#chat>input {
-    box-sizing: border-box;
-}
-
-/* .dispblock {
-    clear: both;
-    display: block;
-} */
-
-#history {
-    box-sizing: border-box;
-    grid-column: 2/3;
-    max-height: 15em;
-    overflow-y: scroll;
 }
 
 .select {
@@ -173,6 +161,17 @@ button>img {
 
 }
 
+#chat {
+    box-sizing: border-box;
+    grid-column: 1/3;
+    padding: 5px 10px;
+    height: 15em;
+}
+
+#chat>input {
+    box-sizing: border-box;
+}
+
 #input-section {
     display: flex;
     justify-content: flex-end;
@@ -182,6 +181,8 @@ button>img {
     width: 100%;
     height: 3em;
     box-sizing: border-box;
+    background-color: rgb(82, 82, 82);
+    color: white;
 }
 
 #submit {
@@ -232,26 +233,95 @@ button>img {
     cursor: pointer;
 }
 
-@media only screen and (max-width: 768px) {
+@media (max-width: 768px) {
+    body {
+        font-size: .5em;
+    }
+    .title {
+        font-size: 1em;
+    }
     .grid-container {
-        max-width: 60em;
-        margin: 0 auto;
+        width: 100%;
+        /* margin: 0 auto; */
+    }
+    #p1image>img, #p2image>img {
+        width: 256px;
+        height: 256px;
+        object-fit: cover;
+    }
+    h2 {
+        font-size: 2em;
+    }
+    button>img {
+        width: 64px;
+        height: 64px;
+        object-fit: cover;
+    }
+}
+
+@media (max-width: 480px) {
+    body {
+        font-size: .25em;
+    }
+    .title {
+        font-size: 3em;
+    }
+    .grid-container {
+        width: 100%;
+        margin: 0 0;
     }
     #p1image>img, #p2image>img {
         width: 15em;
         height: 15em;
         object-fit: cover;
     }
-}
-
-@media only screen and (max-width: 480px) {
-    .grid-container {
-        width: 100%;
-        margin: 0 0;
+    h2 {
+        font-size: 1.25em;
     }
-    #p1image>img, #p2image>img {
-        width: 10em;
-        height: 10em;
+    h4 {
+        font-size: 3em;
+    }
+    #input-text {
+        width: 100%;
+        /* height: 1.5em; */
+        box-sizing: border-box;
+    }
+    
+    #submit {
+        width: 8em;
+        /* height: 1.5em; */
+        box-sizing: border-box;
+    }
+    button>img {
+        width: 16px;
+        height: 16px;
         object-fit: cover;
+    }
+
+    .p1select, .p2select {
+        margin: 1px;
+    }
+
+    #status {
+        font-size: 3em;
+    }
+
+    #chat {
+        box-sizing: border-box;
+        grid-column: 1/3;
+        padding: 5px 10px;
+        height: 100%;
+    }
+    #chat-box {
+        box-sizing: border-box;
+        width: 100%;
+        resize: none;
+        /* margin-right: 15px; */
+        background-color: black;
+        color: rgb(0, 255, 0);
+        font-size: 1.5em;
+        text-align: left;
+        height: 15em;
+    
     }
 }

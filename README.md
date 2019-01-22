@@ -2,19 +2,42 @@
  An Online multiplayer Rock Paper Scissors game using Firebase
 
 ## Game mechanics
-*Short Summary of Rock, Paper, Scissors.
-* Game is over if a player wins 2 out of 3 games.
-* Game is over after 5 minutes of idle time (no activity from either player).
-
+* An online version of the classic Rock, Paper, Scissors game.
 * Whoever selects first will have their buttons grayed out and not active.
-* When second player chooses, their buttons are grayed out and the game object will determine the winner.
-* A 3 second timer countdowns to reveal who won and show the buttons that were selected.
-* Winner gets a point.
-* After 10 seconds the game continues.
-* When the game is over or if no activity after a period of time, the history will update and each player's score will be reset to 0.
+  * A P1 true flag is saved to Firebase
+* When second player chooses, their buttons are grayed out 
+  * A P2 true flag is also saved to Firebase
+* A Firebase listener will check if both P1 and P2 flags are true
+  * If both are true, the `checkWinner` method will run
+  * The screen will show the items they chose and display if Player 1 or 2 has won.
+* Winner gets a point which is saved to Firebase
+* The game starts again and the buttons will be active.
+
+## Chat function
+* If the player plays for the first time and submits text to chat their name will be defaulted to 'player'.
+* When text is submitted to the chat method, the text string and a time stamp is pushed to Firebase.
+  * Using Moment.JS, the `moment().unix()` method was used to add the time stamp.
+  * Unix format was chosen so that I can apply different formats for the chat box window.
+* The player creates a name by pressing `Create a name` button and a Modal pops up so that they can enter a new name
+  * The new name is saved in `localStorage()`
+* The chat name is preceded by a time stamp.
+  * Moment.JS was used to format the time:
+  ```
+  var chat = childSnapshot.val().chat;
+  var chatTime = childSnapshot.val().chatTimeStamp;
+  var convertedTime = moment(chatTime, "X").format("MM/DD/YY hh:mm:ss");
+  ```
+
+## CSS & JavaScript Modal
+* I created a CSS and JavaScript modal based off the Modal tutorial at [W3Schools.com](https://www.w3schools.com/howto/howto_css_modals.asp)
+
+## Programming Notes
+* `<meta name="viewport" content="width=device-width">` is needed for Chrome to work with @media queries properly.
+
+## Attributions
+* [Subtle Patterns](https://www.toptal.com/designers/subtlepatterns/)
 
 ## Firebase code from the excercises for reference
-
 ### `.set()` sets a value:
 ```
     database.ref("/contact").set({
@@ -55,6 +78,7 @@
         dateAdded: firebase.database.ServerValue.TIMESTAMP
     });
     ```
+
 ### `.ref).on("child_added", ...` - When a child has been added event?
     ```
     // Firebase watcher + initial loader HINT: .on("value")
@@ -92,6 +116,7 @@ dataREf.ref().orderByChild("dateAdded").limitToLast(5).on("child_added", functio
     ...
 ```
 
+## Other Firebase Methods
 ### Firebase Presence
 * The following is code for connections
 
@@ -141,15 +166,6 @@ connectionsRef.on("value", function(snapshot) {
 // -------------------------------------------------------------- (CRITICAL - BLOCK) --------------------------- //
 ```
 
-### Other Firebase Methods
 
-## CSS & JavaScript Modal
-* I created a CSS and JavaScript modal at [W3Schools.com](https://www.w3schools.com/howto/howto_css_modals.asp)
-
-## Programming Notes
-* `<meta name="viewport" content="width=device-width">` is needed for Chrome to work with @media queries properly.
-
-## Attributions
-* [Subtle Patterns](https://www.toptal.com/designers/subtlepatterns/)
 
 

@@ -91,39 +91,32 @@ $(document).ready(function () {
             // check if p1 and p2 are not empty
             if (item1 !== undefined && item2 !== undefined) {
                 if (item1 === "rock" && item2 === "scissors") {
-                    $(".p1status").html("Winner!");
-                    $(".p2status").html("Loser!");
+                    $("#status").html("<h2>Player 1 Wins!</h2>Rock Beats Scissors!");
                     console.log("P1 WINS!");
                     this.updateP1Score();
                 } else if (item1 === "paper" && item2 === "rock") {
-                    $(".p1status").html("Winner!");
-                    $(".p2status").html("Loser!");
+                    $("#status").html("<h2>Player 1 Wins!</h2>Paper Beats Rock!");
                     console.log("P1 WINS!");
                     this.updateP1Score();
                 } else if (item1 === "scissors" && item2 === "paper") {
-                    $(".p1status").html("Winner!");
-                    $(".p2status").html("Loser!");
+                    $("#status").html("<h2>Player 1 Wins!</h2>Scissors Beats Paper!");
                     console.log("P1 WINS!");
                     this.updateP1Score();
                 } else if (item2 === "rock" && item1 === "scissors") {
-                    $(".p2status").html("Winner!");
-                    $(".p1status").html("Loser!");
+                    $("#status").html("<h2>Player 2 Wins!</h2>Rock Beats Scissors!");
                     console.log("P2 WINS!");
                     this.updateP2Score();
                 } else if (item2 === "paper" && item1 === "rock") {
-                    $(".p2status").html("Winner!");
-                    $(".p1status").html("Loser!");
+                    $("#status").html("<h2>Player 2 Wins!</h2>Paper Beats Rock!");
                     console.log("P2 WINS!");
                     this.updateP2Score();
                 } else if (item2 === "scissors" && item1 === "paper") {
-                    $(".p2status").html("Winner!");
-                    $(".p1status").html("Loser!");
+                    $("#status").html("<h2>Player 2 Wins!</h2>Scissors Beats Paper!");
                     console.log("P2 WINS!");
                     this.updateP2Score();
                 } else {
                     console.log("DRAW! TRY AGAIN!");
-                    $(".p1status").html("DRAW!");
-                    $(".p2status").html("DRAW!");
+                    $("#status").html("<h2>It's A DRAW!</h2>You both chose " + item1 + "!");
                 }
             };
             rpsGame.showCard("#p1image", pics[item1]);
@@ -224,6 +217,7 @@ $(document).ready(function () {
         console.log("Errors handled: " + errorObject.code);
     });
 
+    // ------------------------ MODAL CODE --------------------------------
     // open Modal
     $("#btnName").on("click", function (event) {
         event.preventDefault();
