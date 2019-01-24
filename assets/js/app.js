@@ -8,6 +8,8 @@ $(document).ready(function () {
     var p2flag = false;
     var p1score = 0;
     var p2score = 0;
+    var userScore = 0;
+    var opponentScore = 0;
 
     var submitFX = document.createElement("audio");
     var alert1 = document.createElement("audio");

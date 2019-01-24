@@ -31,8 +31,13 @@
 ## CSS & JavaScript Modal
 * I created a CSS and JavaScript modal based off the Modal tutorial at [W3Schools.com](https://www.w3schools.com/howto/howto_css_modals.asp)
 
+## TODOs
+* Only show Rock, Scissors, or Paper buttons for user. The opponent buttons will not show, only on their screen.
+* If only 1 user is online that user must wait until another player is online, then the game will start or continue.
+* Show who is online
+
 ## Programming Notes
-* `<meta name="viewport" content="width=device-width">` is needed for Chrome to work with @media queries properly.
+* `<meta name="viewport" content="width=device-width">` in the HTML `<head>` is needed for Chrome to work with @media queries properly.
 
 ## Attributions
 * [Subtle Patterns](https://www.toptal.com/designers/subtlepatterns/)
@@ -40,6 +45,22 @@
   * [Google Firebase Live Group CHat in Javascript](https://codinginfinite.com/google-firebase-live-group-chat-example-javascript/)
 
 ## Firebase code from the excercises for reference
+### User IDs
+* Enabled Anonymous Authentication in Firebase
+* obtain user id with the following code:
+```
+    firebase.auth().onAuthStateChanged(function (user) {
+        if (user) {
+            // User is signed in.
+            var isAnonymous = user.isAnonymous;
+            console.log("user signed in?: ", isAnonymous);
+            user_id = user.uid;
+            console.log(user_id);
+        } else {
+            // User is signed out.
+        }
+    });
+```
 ### `.set()` sets a value:
 ```
     database.ref("/contact").set({
@@ -117,9 +138,6 @@ dataREf.ref().orderByChild("dateAdded").limitToLast(5).on("child_added", functio
         highPrice = parseInt(snapshot.val().highPrice);
     ...
 ```
-
-## Other Firebase Methods
-
 ### Setting Child Name and value
 * `database.ref("users").child(user_id).set(name);`
 
@@ -130,7 +148,7 @@ dataREf.ref().orderByChild("dateAdded").limitToLast(5).on("child_added", functio
   console.log(snapshot.key);
   });
   ```
-  
+
 ### Firebase Presence
 * The following is code for connections
 
