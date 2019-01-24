@@ -125,12 +125,22 @@ $(document).ready(function () {
             $(player).children("img").attr({ "src": val });
         },
 
+        firebaseChat: function(chat) {
+            database.ref("/chat").push({
+            user_id: user_id,
+            chat: chat,
+            chatTimeStamp: currentTime,
+            })
+        },
+
         updateChat: function (arg) {
             var currentTime = moment().unix();
             console.log("moment():", currentTime);
             database.ref("/chat").push({
+                user_id: user_id,
                 chat: arg,
                 chatTimeStamp: currentTime,
+                name: name,
             });
         },
 
@@ -166,6 +176,19 @@ $(document).ready(function () {
     var connections = database.ref("/connections"); // All of our connections will be stored in this directory.
     var isConnected = database.ref(".info/connected"); // boolean value - true if client is connected, false if not.
 
+    var user = firebase.auth().signInAnonymously(); // for Anon Auth and getting a User ID
+
+    // ANONYMOUS AUTHENTICATION to get a userID
+    firebase.auth().onAuthStateChanged(function(user) {
+      if (user) {
+        // User is signed in.
+        var isAnonymous = user.isAnonymous;
+        user_id = user.uid;
+      } else {
+        // User is signed out.
+      }
+    });
+
     // if p1flag and p2flag are TRUE run the rpsGame.checkWinner() method. 
     database.ref("/status").on("value", function (snapshot) {
         var flag1 = snapshot.child("p1").val().p1flag;
@@ -191,6 +214,13 @@ $(document).ready(function () {
     }, function (errorObject) {
         console.log("Errors handled: " + errorObject.code);
     });
+
+    // NAME listener - retreives a list of names to pair with userID
+    database.ref("/users").on("child_added", function (userSnapshot) {
+        var users = userSnapshot.val().userNameID; // userID and name pairs
+
+    });
+
 
     // CHAT listener
     database.ref("/chat").limitToLast(20).on("child_added", function (childSnapshot) {

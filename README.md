@@ -36,6 +36,8 @@
 
 ## Attributions
 * [Subtle Patterns](https://www.toptal.com/designers/subtlepatterns/)
+* Need to find out how to create a user ID so I found a tutorial on Chat:
+  * [Google Firebase Live Group CHat in Javascript](https://codinginfinite.com/google-firebase-live-group-chat-example-javascript/)
 
 ## Firebase code from the excercises for reference
 ### `.set()` sets a value:
