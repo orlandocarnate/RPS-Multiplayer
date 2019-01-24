@@ -2,7 +2,7 @@ $(document).ready(function () {
     // ----- start -----
 
     // Global variables
-    var name; // localStorage variable
+    var name;
     var p1item, p2item;
     var p1flag = false;
     var p2flag = false;
@@ -18,13 +18,13 @@ $(document).ready(function () {
     alert2.setAttribute("src", "assets/sounds/alert2.mp3");
 
     // get localStorage if exists
-    if (typeof localStorage["myName"] !== 'undefined') {
-        name = localStorage["myName"];
-        console.log("localStorage['myName']: ", name);
-    } else {
-        name = "player";
-        console.log("no localStorage for myName");
-    };
+    // if (typeof localStorage["myName"] !== 'undefined') {
+    //     name = localStorage["myName"];
+    //     console.log("localStorage['myName']: ", name);
+    // } else {
+    //     name = "player";
+    //     console.log("no localStorage for myName");
+    // };
 
     var pics = {
         rock: "assets/images/the_rock_headshot.png",
@@ -125,17 +125,18 @@ $(document).ready(function () {
             $(player).children("img").attr({ "src": val });
         },
 
-        firebaseChat: function(chat) {
+        firebaseChat: function (chat) {
             database.ref("/chat").push({
-            user_id: user_id,
-            chat: chat,
-            chatTimeStamp: currentTime,
+                user_id: user_id,
+                chat: chat,
+                chatTimeStamp: currentTime,
             })
         },
 
         updateChat: function (arg) {
             var currentTime = moment().unix();
             console.log("moment():", currentTime);
+            console.log("user_id: ", user_id);
             database.ref("/chat").push({
                 user_id: user_id,
                 chat: arg,
@@ -171,22 +172,24 @@ $(document).ready(function () {
     };
     firebase.initializeApp(config); // Initialize Firebase
 
-    // FIREBASE Variables
+    // ---------- FIREBASE Variables ----------------------
     var database = firebase.database(); // Create a variable to reference the database.
     var connections = database.ref("/connections"); // All of our connections will be stored in this directory.
     var isConnected = database.ref(".info/connected"); // boolean value - true if client is connected, false if not.
 
-    var user = firebase.auth().signInAnonymously(); // for Anon Auth and getting a User ID
+    var user_id = firebase.auth().signInAnonymously(); // for Anon Auth and getting a User ID
 
-    // ANONYMOUS AUTHENTICATION to get a userID
-    firebase.auth().onAuthStateChanged(function(user) {
-      if (user) {
-        // User is signed in.
-        var isAnonymous = user.isAnonymous;
-        user_id = user.uid;
-      } else {
-        // User is signed out.
-      }
+    // ---------- ANONYMOUS AUTHENTICATION to get a userID -------------------
+    firebase.auth().onAuthStateChanged(function (user) {
+        if (user) {
+            // User is signed in.
+            var isAnonymous = user.isAnonymous;
+            console.log("user signed in?: ", isAnonymous);
+            user_id = user.uid;
+            console.log(user_id);
+        } else {
+            // User is signed out.
+        }
     });
 
     // if p1flag and p2flag are TRUE run the rpsGame.checkWinner() method. 
@@ -215,14 +218,32 @@ $(document).ready(function () {
         console.log("Errors handled: " + errorObject.code);
     });
 
-    // NAME listener - retreives a list of names to pair with userID
-    database.ref("/users").on("child_added", function (userSnapshot) {
-        var users = userSnapshot.val().userNameID; // userID and name pairs
-
+    // ---------- Player Scores listener ----------
+    database.ref("/score").on("value", function (childSnapshot) {
+        p1score = childSnapshot.child("p1").val().p1score;
+        p2score = childSnapshot.child("p2").val().p2score;
+        $(".p1score").text(p1score);
+        $(".p2score").text(p2score);
+        // Handle the errors
+    }, function (errorObject) {
+        console.log("Errors handled: " + errorObject.code);
     });
 
+    // ---------- CHAT SECTION  ----------
+    // Firebase connection status
+    isConnected.on("value", function (connectedSnapshot) {
+        if (connectedSnapshot.val()) {
+            var connList = connections.push(true); // add user to list from connections
+            connList.onDisconnect().remove(); // remove user from list when disconnected
+        }
+    });
 
-    // CHAT listener
+    // Number of connections
+    connections.on("value", function (connectionSnapshot) {
+        $("#online-viewers").text(connectionSnapshot.numChildren()); // gets number of connections and outputs to DOM
+    });
+
+    // chat listener
     database.ref("/chat").limitToLast(20).on("child_added", function (childSnapshot) {
         var chat = childSnapshot.val().chat;
         var chatTime = childSnapshot.val().chatTimeStamp;
@@ -236,28 +257,12 @@ $(document).ready(function () {
         console.log("Errors handled: " + errorObject.code);
     });
 
-    // Player Scores listener
-    database.ref("/score").on("value", function (childSnapshot) {
-        p1score = childSnapshot.child("p1").val().p1score;
-        p2score = childSnapshot.child("p2").val().p2score;
-        $(".p1score").text(p1score);
-        $(".p2score").text(p2score);
-        // Handle the errors
-    }, function (errorObject) {
-        console.log("Errors handled: " + errorObject.code);
-    });
-
-    // Firebase Online connection counter
-    isConnected.on("value", function(connectedSnapshot) {
-        if (connectedSnapshot.val()) {
-            var connList = connections.push(true); // add user to list from connections
-            connList.onDisconnect().remove(); // remove user from list when disconnected
-        }
-    });
-
-    // when connection state changes
-    connections.on("value", function(connectionSnapshot) {
-        $("#online-viewers").text(connectionSnapshot.numChildren()); // gets number of connections and outputs to DOM
+    // NAME listener - retreives the saved name
+    database.ref("/users").on("value", function (userSnapshot) {
+        // var users = userSnapshot.val().userNameID; // userID and name pairs
+        // console.log('ID, Name: ',user_id ,userSnapshot.child(user_id).val().name);
+        console.log("userSnapshot: ", userSnapshot.child(user_id).val().name);
+        name = userSnapshot.child(user_id).val().name;
     });
 
 
@@ -279,8 +284,8 @@ $(document).ready(function () {
         event.preventDefault();
         if ($("#text-name").val() !== "") {
             name = $("#text-name").val();
-            localStorage["myName"] = name;
-            console.log("Player name: ", name);
+            // localStorage["myName"] = name;
+            database.ref("/users").child(user_id).set({name: name});
             $(".modal").css("display", "none");
         }
     });

@@ -119,6 +119,18 @@ dataREf.ref().orderByChild("dateAdded").limitToLast(5).on("child_added", functio
 ```
 
 ## Other Firebase Methods
+
+### Setting Child Name and value
+* `database.ref("users").child(user_id).set(name);`
+
+### Finding exact matches
+* use `equalTo()` method to filter based on exact matches
+  ```
+  ref.orderByChild("height").equalTo(25).on("child_added", function(snapshot) {
+  console.log(snapshot.key);
+  });
+  ```
+  
 ### Firebase Presence
 * The following is code for connections
 
