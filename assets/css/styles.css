@@ -36,6 +36,10 @@ li {
     font-size: .5em;
 }
 
+.bottom-margin {
+    margin-bottom: 5px;
+}
+
 header, footer, aside, section, #left-select, #right-select, main, #chat, #history {
     box-sizing: border-box;
     background-color: white;

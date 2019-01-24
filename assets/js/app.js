@@ -34,22 +34,6 @@ $(document).ready(function () {
         gif: "https://thumbs.gfycat.com/RegalAssuredGossamerwingedbutterfly-max-1mb.gif"
     };
 
-
-
-    // FIREBASE API
-    var config = {
-        apiKey: "AIza" + "SyA6MnePmIsN9caVZaX1GQGt1dRkh" + "-8MBTc",
-        authDomain: "rps-game-148d6.firebaseapp.com",
-        databaseURL: "https://rps-game-148d6.firebaseio.com",
-        projectId: "rps-game-148d6",
-        storageBucket: "",
-        messagingSenderId: "472953467227"
-    };
-    firebase.initializeApp(config); // Initialize Firebase
-
-    // Create a variable to reference the database.
-    var database = firebase.database();
-
     // p1 listener
     $(".p1select").on("click", function (event) {
         event.preventDefault();
@@ -165,9 +149,25 @@ $(document).ready(function () {
         },
     };
 
-    // FIREBASE Listner - if p1flag and p2flag are TRUE run the rpsGame.checkWinner() method. 
+    // ---------- FIREBASE ----------------
+    // FIREBASE API
+    var config = {
+        apiKey: "AIza" + "SyA6MnePmIsN9caVZaX1GQGt1dRkh" + "-8MBTc",
+        authDomain: "rps-game-148d6.firebaseapp.com",
+        databaseURL: "https://rps-game-148d6.firebaseio.com",
+        projectId: "rps-game-148d6",
+        storageBucket: "",
+        messagingSenderId: "472953467227"
+    };
+    firebase.initializeApp(config); // Initialize Firebase
+
+    // FIREBASE Variables
+    var database = firebase.database(); // Create a variable to reference the database.
+    var connections = database.ref("/connections"); // All of our connections will be stored in this directory.
+    var isConnected = database.ref(".info/connected"); // boolean value - true if client is connected, false if not.
+
+    // if p1flag and p2flag are TRUE run the rpsGame.checkWinner() method. 
     database.ref("/status").on("value", function (snapshot) {
-        // Log everything that's coming out of snapshot
         var flag1 = snapshot.child("p1").val().p1flag;
         var item1 = snapshot.child("p1").val().p1item;
         var flag2 = snapshot.child("p2").val().p2flag;
@@ -185,7 +185,6 @@ $(document).ready(function () {
             $(".p2select").removeClass("btn-opacity").attr("disabled", false);
         }
         if (flag1 === true && flag2 === true) {
-            console.log("Checking Winner");
             rpsGame.checkWinner(item1, item2);
         }
         // Handle the errors
@@ -193,9 +192,8 @@ $(document).ready(function () {
         console.log("Errors handled: " + errorObject.code);
     });
 
-    // chat FIREBASE listener
+    // CHAT listener
     database.ref("/chat").limitToLast(20).on("child_added", function (childSnapshot) {
-        // Log everything that's coming out of snapshot
         var chat = childSnapshot.val().chat;
         var chatTime = childSnapshot.val().chatTimeStamp;
         var convertedTime = moment(chatTime, "X").format("MM/DD hh:mm");
@@ -208,7 +206,7 @@ $(document).ready(function () {
         console.log("Errors handled: " + errorObject.code);
     });
 
-    // p1score FIREBASE listener
+    // Player Scores listener
     database.ref("/score").on("value", function (childSnapshot) {
         p1score = childSnapshot.child("p1").val().p1score;
         p2score = childSnapshot.child("p2").val().p2score;
@@ -218,6 +216,21 @@ $(document).ready(function () {
     }, function (errorObject) {
         console.log("Errors handled: " + errorObject.code);
     });
+
+    // Firebase Online connection counter
+    isConnected.on("value", function(connectedSnapshot) {
+        if (connectedSnapshot.val()) {
+            var connList = connections.push(true); // add user to list from connections
+            connList.onDisconnect().remove(); // remove user from list when disconnected
+        }
+    });
+
+    // when connection state changes
+    connections.on("value", function(connectionSnapshot) {
+        $("#online-viewers").text(connectionSnapshot.numChildren()); // gets number of connections and outputs to DOM
+    });
+
+
 
     // ------------------------ MODAL CODE --------------------------------
     // open Modal
