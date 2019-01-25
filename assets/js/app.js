@@ -75,7 +75,7 @@ $(document).ready(function () {
         console.log("submit test");
         var chatText = $("#input-text").val().trim();
         if (chatText !== "") {
-            pushChat(name + ": " + chatText);
+            rpsGame.pushChat(name + ": " + chatText);
             $("#input-text").val("");
         }
 
@@ -196,11 +196,10 @@ $(document).ready(function () {
             // User is signed in.
             var isAnonymous = user.isAnonymous;
             console.log("user signed in?: ", isAnonymous);
-            // user_UID = user.uid;
+            user_UID = user.uid;
             console.log("user.uid: ", user.uid);
         } else {
-            // FirebaseAuth.getInstance().signOut();
-            // sign out operations
+            FirebaseAuth.getInstance().signOut();
         }
     });
 
