@@ -39,6 +39,7 @@ $(document).ready(function () {
     // p1 listener
     $(".p1select").on("click", function (event) {
         event.preventDefault();
+        $("#status").empty();
         p1item = $(this).val();
         rpsGame.showCard("#p1image", pics["q"]);
         rpsGame.showCard("#p2image", pics["q"]);
@@ -54,6 +55,7 @@ $(document).ready(function () {
     //p2 listener
     $(".p2select").on("click", function (event) {
         event.preventDefault();
+        $("#status").empty();
         p2item = $(this).val();
         rpsGame.showCard("#p1image", pics["q"]);
         rpsGame.showCard("#p2image", pics["q"]);
@@ -70,9 +72,10 @@ $(document).ready(function () {
     // chat button
     $("#submit").on("click", function (event) {
         event.preventDefault();
+        console.log("submit test");
         var chatText = $("#input-text").val().trim();
         if (chatText !== "") {
-            rpsGame.updateChat(name + ": " + chatText);
+            pushChat(name + ": " + chatText);
             $("#input-text").val("");
         }
 
@@ -135,20 +138,24 @@ $(document).ready(function () {
             })
         },
 
-        updateChat: function (arg) {
+        pushChat: function (arg) {
             var currentTime = moment().unix();
             console.log("moment():", currentTime);
-            console.log("user_id: ", user_id);
+            console.log("user_id: ", user_UID);
             database.ref("/chat").push({
-                user_id: user_id,
+                user_id: user_UID,
                 chat: arg,
                 chatTimeStamp: currentTime,
                 name: name,
             });
+    
         },
 
         updateP1Score: function () {
             p1score++;
+            userScore++;
+            console.log("id, score ", user_id, userScore);
+            database.ref("/users").child(user_id).set({ score: userScore });
             database.ref("/score/p1").set({
                 p1score: p1score,
             });
@@ -178,8 +185,10 @@ $(document).ready(function () {
     var database = firebase.database(); // Create a variable to reference the database.
     var connections = database.ref("/connections"); // All of our connections will be stored in this directory.
     var isConnected = database.ref(".info/connected"); // boolean value - true if client is connected, false if not.
+    var user_UID; // Global USER object for firebase.auth().onAuthStateChanged(function (user) {...}
 
-    var user_id = firebase.auth().signInAnonymously(); // for Anon Auth and getting a User ID
+    var userObject = firebase.auth().signInAnonymously(); // OBJECT for Anon Auth ands SIGNS IN
+    console.log("Logged In as Anon. User Object: ", userObject);
 
     // ---------- ANONYMOUS AUTHENTICATION to get a userID -------------------
     firebase.auth().onAuthStateChanged(function (user) {
@@ -187,48 +196,12 @@ $(document).ready(function () {
             // User is signed in.
             var isAnonymous = user.isAnonymous;
             console.log("user signed in?: ", isAnonymous);
-            user_id = user.uid;
-            console.log(user_id);
+            // user_UID = user.uid;
+            console.log("user.uid: ", user.uid);
         } else {
-            // User is signed out.
+            // FirebaseAuth.getInstance().signOut();
+            // sign out operations
         }
-    });
-
-    // if p1flag and p2flag are TRUE run the rpsGame.checkWinner() method. 
-    database.ref("/status").on("value", function (snapshot) {
-        var flag1 = snapshot.child("p1").val().p1flag;
-        var item1 = snapshot.child("p1").val().p1item;
-        var flag2 = snapshot.child("p2").val().p2flag;
-        var item2 = snapshot.child("p2").val().p2item;
-        if (flag1 === true) {
-            alert1.play();
-            $(".p1select").addClass("btn-opacity").attr("disabled", true); // disable p1 buttons
-        } else {
-            $(".p1select").removeClass("btn-opacity").attr("disabled", false);
-        }
-        if (flag2 === true) {
-            alert2.play();
-            $(".p2select").addClass("btn-opacity").attr("disabled", true); // disable p1 buttons
-        } else {
-            $(".p2select").removeClass("btn-opacity").attr("disabled", false);
-        }
-        if (flag1 === true && flag2 === true) {
-            rpsGame.checkWinner(item1, item2);
-        }
-        // Handle the errors
-    }, function (errorObject) {
-        console.log("Errors handled: " + errorObject.code);
-    });
-
-    // ---------- Player Scores listener ----------
-    database.ref("/score").on("value", function (childSnapshot) {
-        p1score = childSnapshot.child("p1").val().p1score;
-        p2score = childSnapshot.child("p2").val().p2score;
-        $(".p1score").text(p1score);
-        $(".p2score").text(p2score);
-        // Handle the errors
-    }, function (errorObject) {
-        console.log("Errors handled: " + errorObject.code);
     });
 
     // ---------- CHAT SECTION  ----------
@@ -245,26 +218,37 @@ $(document).ready(function () {
         $("#online-viewers").text(connectionSnapshot.numChildren()); // gets number of connections and outputs to DOM
     });
 
-    // chat listener
+    // CHAT listener
     database.ref("/chat").limitToLast(20).on("child_added", function (childSnapshot) {
         var chat = childSnapshot.val().chat;
         var chatTime = childSnapshot.val().chatTimeStamp;
         var convertedTime = moment(chatTime, "X").format("MM/DD hh:mm");
         console.log("chat time: ", convertedTime);
         submitFX.play();
-        $("#chat-box").append("<li><span class='chat-time'>(" + convertedTime + ")</span> " + chat + "</li>");
+        if (user_UID === childSnapshot.val().user_id) {
+            msgType = "sent";
+        } else {
+            msgType = "replies";
+        }
+        var $chatLine = $("<li><span class='" + msgType + "'><span class='chat-time'>(" + convertedTime + ")</span> " + chat + "</span></li>");
+        $("#chat-box").append($chatLine);
         $("#chat-box").animate({ scrollTop: $("#chat-box")[0].scrollHeight });
         // Handle the errors
     }, function (errorObject) {
         console.log("Errors handled: " + errorObject.code);
     });
 
-    // NAME listener - retreives the saved name
+    // User listener - retreives the saved name and score
     database.ref("/users").on("value", function (userSnapshot) {
-        // var users = userSnapshot.val().userNameID; // userID and name pairs
-        // console.log('ID, Name: ',user_id ,userSnapshot.child(user_id).val().name);
-        console.log("userSnapshot: ", userSnapshot.child(user_id).val().name);
-        name = userSnapshot.child(user_id).val().name;
+        console.log("chat listener: ", userSnapshot.child(user_UID).val());
+        if (userSnapshot.child(user_UID).val().name === undefined) {
+            name = "guest"; // assigns name of guest if there is none
+        } else {
+            name = userSnapshot.child(user_UID).val().name;
+        }
+        console.log("name: ", name);
+        userScore = userSnapshot.child(user_UID).val().score;
+        console.log("score: ", userScore);
     });
 
 
@@ -284,10 +268,10 @@ $(document).ready(function () {
     // get value for name then close modal
     $("#submit-name").on("click", function (event) {
         event.preventDefault();
-        if ($("#text-name").val() !== "") {
-            name = $("#text-name").val();
+        if ($("#text-name").val().trim() !== "") {
+            name = $("#text-name").val().trim();
             // localStorage["myName"] = name;
-            database.ref("/users").child(user_id).set({name: name});
+            database.ref("/users").child(user_UID).update({ name: name });
             $(".modal").css("display", "none");
         }
     });

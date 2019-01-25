@@ -31,6 +31,7 @@ a, a:visited {
 li {
     list-style: none;
     font-size: 1.5em;
+    margin-bottom: 10px;
 }
 .chat-time {
     font-size: .5em;
@@ -145,6 +146,18 @@ button>img {
     height: 100%;
 }
 
+.sent {
+    font-weight: bolder;
+    color: white;
+    background-color: blue;
+    border-radius: 5px;
+}
+.replies {
+    font-weight: normal;
+    color: white;
+    background-color: green;
+    border-radius: 5px;
+}
 #chat-box {
     box-sizing: border-box;
     width: 100%;
@@ -211,6 +224,7 @@ button>img {
     overflow: auto; /* Enable scroll if needed */
     background-color: rgb(0, 0, 0); /* Fallback color */
     background-color: rgba(0, 0, 0, 0.4); /* Black w/ opacity */
+
 }
 
 /* Modal Content/Box */
@@ -220,6 +234,7 @@ button>img {
     padding: 20px;
     border: 1px solid #888;
     width: 50%; /* Could be more or less, depending on screen size */
+    border-radius: 15px;
     
 }
 

@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width">
+    <title>An Online Multiplayer Rock, Paper, Scissors Game</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- RESET CSS -->
+    <link rel="stylesheet" type="text/css" media="screen" href="assets/css/reset.css" />
+    <link rel="stylesheet" type="text/css" media="screen" href="assets/css/styles.css" />
+    <!-- JQUERY -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+    <!-- Link to Moment.js should go here -->
+    <script src="https://cdn.jsdelivr.net/momentjs/2.12.0/moment.min.js"></script>F
+
+    <!-- FIREBASE API -->
+    <script src="https://www.gstatic.com/firebasejs/5.8.0/firebase.js"></script>
+
+    <!-- <script src="assets/js/app.js"></script> -->
+    <link href="https://fonts.googleapis.com/css?family=Baloo+Tamma|Fugaz+One|Marmelad|ZCOOL+QingKe+HuangYou" rel="stylesheet">
+</head>
+
+<body>
+    <div class="grid-container">
+        <div id="chat">
+            <div class="bottom-margin">
+                <h4>Viewers Online: <span id="online-viewers"></span></h4>
+            </div>
+            <div id="chat-box"></div>
+            <div id="input-section">
+                <input type="text" id="input-text" placeholder="Type Here">
+                <button id="submit">Send Msg</button>
+                <button id="btnName">Create a name</button>
+            </div>
+        </div>
+
+        <!-- CSS Modal -->
+        <div id="nameModal" class="modal">
+            <!-- Modal content -->
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <p>Enter a new Chat Name</p>
+                <input id="text-name" type="text" placeholder="Chat Name">
+                <button id="submit-name">Submit</button><button id="cancel-name">Cancel</button>
+            </div>
+        </div>
+
+        <script src="assets/js/chat.js"></script>
+
+    </div>
+</body>
+
+</html>

@@ -198,6 +198,11 @@ connectionsRef.on("value", function(snapshot) {
 // -------------------------------------------------------------- (CRITICAL - BLOCK) --------------------------- //
 ```
 
+### CHAT FUNCTION
+* The Live Chat Tutorial from [CodingInfinite.com](https://codinginfinite.com/google-firebase-live-group-chat-example-javascript/) was very helpful.
+    * Learned how to style the sent and reply messages.
+    * Learned more about Anonymous Authentications for Offline Storage and Persistance.
+
 
 
 
