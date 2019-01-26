@@ -44,7 +44,7 @@ $(document).ready(function () {
         rpsGame.showCard("#p1image", pics["q"]);
         rpsGame.showCard("#p2image", pics["q"]);
         p1flag = true;
-
+        // $(".p1select").addClass("btn-opacity").attr("disabled", true); // disable p1 buttons
         // save data to Firebase RTDB
         database.ref("/status/p1").set({
             p1flag: p1flag,
@@ -61,7 +61,7 @@ $(document).ready(function () {
         rpsGame.showCard("#p2image", pics["q"]);
         console.log("P2 chose " + p2item);
         p2flag = true;
-        $(".p2select").addClass("btn-opacity").attr("disabled", true); // disable p2 buttons
+        // $(".p2select").addClass("btn-opacity").attr("disabled", true); // disable p2 buttons
         // save data to Firebase RTDB
         database.ref("/status/p2").set({
             p2flag: p2flag,
@@ -148,14 +148,13 @@ $(document).ready(function () {
                 chatTimeStamp: currentTime,
                 name: name,
             });
-    
+
         },
 
         updateP1Score: function () {
             p1score++;
             userScore++;
-            console.log("id, score ", user_id, userScore);
-            database.ref("/users").child(user_id).set({ score: userScore });
+            database.ref("/users").child(user_UID).set({ score: userScore });
             database.ref("/score/p1").set({
                 p1score: p1score,
             });
@@ -190,6 +189,43 @@ $(document).ready(function () {
     var userObject = firebase.auth().signInAnonymously(); // OBJECT for Anon Auth ands SIGNS IN
     console.log("Logged In as Anon. User Object: ", userObject);
 
+    // if p1flag and p2flag are TRUE run the rpsGame.checkWinner() method. 
+    database.ref("/status").on("value", function (snapshot) {
+        var flag1 = snapshot.child("p1").val().p1flag;
+        var item1 = snapshot.child("p1").val().p1item;
+        var flag2 = snapshot.child("p2").val().p2flag;
+        var item2 = snapshot.child("p2").val().p2item;
+        if (flag1 === true) {
+            alert1.play();
+            $(".p1select").addClass("btn-opacity").attr("disabled", true); // disable p1 buttons
+        } else {
+            $(".p1select").removeClass("btn-opacity").attr("disabled", false);
+        }
+        if (flag2 === true) {
+            alert2.play();
+            $(".p2select").addClass("btn-opacity").attr("disabled", true); // disable p1 buttons
+        } else {
+            $(".p2select").removeClass("btn-opacity").attr("disabled", false);
+        }
+        if (flag1 === true && flag2 === true) {
+            rpsGame.checkWinner(item1, item2);
+        }
+        // Handle the errors
+    }, function (errorObject) {
+        console.log("Errors handled: " + errorObject.code);
+    });
+
+    // ---------- Player Scores listener ----------
+    database.ref("/score").on("value", function (childSnapshot) {
+        p1score = childSnapshot.child("p1").val().p1score;
+        p2score = childSnapshot.child("p2").val().p2score;
+        $(".p1score").text(p1score);
+        $(".p2score").text(p2score);
+        // Handle the errors
+    }, function (errorObject) {
+        console.log("Errors handled: " + errorObject.code);
+    });
+    
     // ---------- ANONYMOUS AUTHENTICATION to get a userID -------------------
     firebase.auth().onAuthStateChanged(function (user) {
         if (user) {
