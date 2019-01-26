@@ -75,7 +75,7 @@ $(document).ready(function () {
         console.log("submit test");
         var chatText = $("#input-text").val().trim();
         if (chatText !== "") {
-            rpsGame.pushChat(name + ": " + chatText);
+            rpsGame.pushChat(chatText);
             $("#input-text").val("");
         }
 
@@ -233,6 +233,7 @@ $(document).ready(function () {
             var isAnonymous = user.isAnonymous;
             console.log("user signed in?: ", isAnonymous);
             user_UID = user.uid;
+
             console.log("user.uid: ", user.uid);
         } else {
             FirebaseAuth.getInstance().signOut();
@@ -244,30 +245,15 @@ $(document).ready(function () {
     isConnected.on("value", function (connectedSnapshot) {
         if (connectedSnapshot.val()) {
             var connList = connections.push(true); // add user to list from connections
-            /* connList.onDisconnect().update({
-                status:
-                {
-                    p1: {
-                        p1flag: false,
-                        p1item: ""
-                    },
-                    p2: {
-                        p2flag: false,
-                        p2item: ""
-                    }
-                }
-            })
-            */
             // reset p1 and p2 flag status to false
-            database.ref("/status/p1").set({
-                p1flag: false,
-                p1item: ""
-            });
-            database.ref("/status/p2").set({
-                p2flag: false,
-                p2item: ""
-            });
-
+            // database.ref("/status/p1").set({
+            //     p1flag: false,
+            //     p1item: ""
+            // });
+            // database.ref("/status/p2").set({
+            //     p2flag: false,
+            //     p2item: ""
+            // });
             connList.onDisconnect().remove(); // remove user from list when disconnected
         }
     });
@@ -280,6 +266,7 @@ $(document).ready(function () {
     // CHAT listener
     database.ref("/chat").limitToLast(20).on("child_added", function (childSnapshot) {
         var chat = childSnapshot.val().chat;
+        var chatName = childSnapshot.val().name;
         var chatTime = childSnapshot.val().chatTimeStamp;
         var convertedTime = moment(chatTime, "X").format("MM/DD hh:mm");
         console.log("chat time: ", convertedTime);
@@ -289,7 +276,7 @@ $(document).ready(function () {
         } else {
             msgType = "replies";
         }
-        var $chatLine = $("<li><span class='" + msgType + "'><span class='chat-time'>(" + convertedTime + ")</span> " + chat + "</span></li>");
+        var $chatLine = $("<li><span class='chat-time'>(" + convertedTime + ")</span>" + chatName + ": <span class='" + msgType + "'>" + chat + "</span></li>");
         $("#chat-box").append($chatLine);
         $("#chat-box").animate({ scrollTop: $("#chat-box")[0].scrollHeight });
         // Handle the errors
