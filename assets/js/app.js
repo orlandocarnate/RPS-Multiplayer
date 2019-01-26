@@ -225,7 +225,7 @@ $(document).ready(function () {
     }, function (errorObject) {
         console.log("Errors handled: " + errorObject.code);
     });
-    
+
     // ---------- ANONYMOUS AUTHENTICATION to get a userID -------------------
     firebase.auth().onAuthStateChanged(function (user) {
         if (user) {
@@ -244,6 +244,30 @@ $(document).ready(function () {
     isConnected.on("value", function (connectedSnapshot) {
         if (connectedSnapshot.val()) {
             var connList = connections.push(true); // add user to list from connections
+            /* connList.onDisconnect().update({
+                status:
+                {
+                    p1: {
+                        p1flag: false,
+                        p1item: ""
+                    },
+                    p2: {
+                        p2flag: false,
+                        p2item: ""
+                    }
+                }
+            })
+            */
+            // reset p1 and p2 flag status to false
+            database.ref("/status/p1").set({
+                p1flag: false,
+                p1item: ""
+            });
+            database.ref("/status/p2").set({
+                p2flag: false,
+                p2item: ""
+            });
+
             connList.onDisconnect().remove(); // remove user from list when disconnected
         }
     });
