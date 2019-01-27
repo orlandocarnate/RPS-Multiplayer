@@ -171,7 +171,7 @@ $(document).ready(function () {
     // ---------- FIREBASE ----------------
     // FIREBASE API
     var config = {
-        apiKey: "AIza" + "SyA6MnePmIsN9caVZaX1GQGt1dRkh" + "-8MBTc",
+        apiKey: "AIza" + "SyA6MnePmIsN9" + "caVZaX1GQGt1dRkh" + "-8MBTc",
         authDomain: "rps-game-148d6.firebaseapp.com",
         databaseURL: "https://rps-game-148d6.firebaseio.com",
         projectId: "rps-game-148d6",
@@ -186,8 +186,14 @@ $(document).ready(function () {
     var isConnected = database.ref(".info/connected"); // boolean value - true if client is connected, false if not.
     var user_UID; // Global USER object for firebase.auth().onAuthStateChanged(function (user) {...}
 
-    var userObject = firebase.auth().signInAnonymously(); // OBJECT for Anon Auth ands SIGNS IN
-    console.log("Logged In as Anon. User Object: ", userObject);
+    // OBJECT for Anon Auth ands SIGNS IN
+    firebase.auth().signInAnonymously().catch(function (error) {
+        // Handle Errors here.
+        var errorCode = error.code;
+        var errorMessage = error.message;
+        // ...
+    });
+    // console.log("Logged In as Anon. User Object: ", userObject);
 
     // if p1flag and p2flag are TRUE run the rpsGame.checkWinner() method. 
     database.ref("/status").on("value", function (snapshot) {
@@ -287,10 +293,13 @@ $(document).ready(function () {
     // User listener - retreives the saved name and score
     database.ref("/users").on("value", function (userSnapshot) {
         console.log("chat listener: ", userSnapshot.child(user_UID).val());
-        if (userSnapshot.child(user_UID).val().name === undefined) {
+        console.log("name exists: ", userSnapshot.child(user_UID).child("name").exists());
+        if (userSnapshot.child(user_UID).child("name").exists() === false) {
+
             name = "guest"; // assigns name of guest if there is none
         } else {
             name = userSnapshot.child(user_UID).val().name;
+            console.log("Get user name: ", name);
         }
         console.log("name: ", name);
         userScore = userSnapshot.child(user_UID).val().score;
