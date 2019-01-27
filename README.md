@@ -31,7 +31,7 @@
 ## CSS & JavaScript Modal
 * I created a CSS and JavaScript modal based off the Modal tutorial at [W3Schools.com](https://www.w3schools.com/howto/howto_css_modals.asp)
 
-## TODOs
+## TODOs or Future Implementations
 * Only show Rock, Scissors, or Paper buttons for user. The opponent buttons will not show, only on their screen.
 * If only 1 user is online that user must wait until another player is online, then the game will start or continue.
 * Show who is online
@@ -46,7 +46,17 @@
 
 ## Firebase code from the excercises for reference
 ### User IDs
-* Enabled Anonymous Authentication in Firebase
+* Enabled [Anonymous Authentication in Firebase](https://firebase.google.com/docs/auth/web/anonymous-auth)
+* call the `signInAnonymously` method
+```
+firebase.auth().signInAnonymously().catch(function(error) {
+  // Handle Errors here.
+  var errorCode = error.code;
+  var errorMessage = error.message;
+  // ...
+});
+```
+
 * obtain user id with the following code:
 ```
     firebase.auth().onAuthStateChanged(function (user) {

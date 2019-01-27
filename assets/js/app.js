@@ -19,15 +19,6 @@ $(document).ready(function () {
     alert1.setAttribute("src", "assets/sounds/alert1.mp3");
     alert2.setAttribute("src", "assets/sounds/alert2.mp3");
 
-    // get localStorage if exists
-    // if (typeof localStorage["myName"] !== 'undefined') {
-    //     name = localStorage["myName"];
-    //     console.log("localStorage['myName']: ", name);
-    // } else {
-    //     name = "player";
-    //     console.log("no localStorage for myName");
-    // };
-
     var pics = {
         rock: "assets/images/the_rock_headshot.png",
         paper: "assets/images/paper.png",
@@ -44,7 +35,6 @@ $(document).ready(function () {
         rpsGame.showCard("#p1image", pics["q"]);
         rpsGame.showCard("#p2image", pics["q"]);
         p1flag = true;
-        // $(".p1select").addClass("btn-opacity").attr("disabled", true); // disable p1 buttons
         // save data to Firebase RTDB
         database.ref("/status/p1").set({
             p1flag: p1flag,
@@ -191,9 +181,10 @@ $(document).ready(function () {
         // Handle Errors here.
         var errorCode = error.code;
         var errorMessage = error.message;
+        console.log("Error code & Message if any: ", errorCode, errorMessage);
         // ...
     });
-    // console.log("Logged In as Anon. User Object: ", userObject);
+    // console.log("Logged In as Anon. Current User Object: ", currentUser);
 
     // if p1flag and p2flag are TRUE run the rpsGame.checkWinner() method. 
     database.ref("/status").on("value", function (snapshot) {
@@ -239,7 +230,6 @@ $(document).ready(function () {
             var isAnonymous = user.isAnonymous;
             console.log("user signed in?: ", isAnonymous);
             user_UID = user.uid;
-
             console.log("user.uid: ", user.uid);
         } else {
             FirebaseAuth.getInstance().signOut();
@@ -251,15 +241,6 @@ $(document).ready(function () {
     isConnected.on("value", function (connectedSnapshot) {
         if (connectedSnapshot.val()) {
             var connList = connections.push(true); // add user to list from connections
-            // reset p1 and p2 flag status to false
-            // database.ref("/status/p1").set({
-            //     p1flag: false,
-            //     p1item: ""
-            // });
-            // database.ref("/status/p2").set({
-            //     p2flag: false,
-            //     p2item: ""
-            // });
             connList.onDisconnect().remove(); // remove user from list when disconnected
         }
     });
@@ -295,29 +276,17 @@ $(document).ready(function () {
         console.log("chat listener: ", userSnapshot.child(user_UID).val());
         console.log("name exists: ", userSnapshot.child(user_UID).child("name").exists());
         if (userSnapshot.child(user_UID).child("name").exists() === false) {
-
             name = "guest"; // assigns name of guest if there is none
         } else {
             name = userSnapshot.child(user_UID).val().name;
-            console.log("Get user name: ", name);
         }
-        console.log("name: ", name);
-        userScore = userSnapshot.child(user_UID).val().score;
-        console.log("score: ", userScore);
     });
 
-
-
-    // ------------------------ MODAL CODE --------------------------------
+    // ------------------------ MODAL CODE - https://www.w3schools.com/howto/howto_css_modals.asp
     // open Modal
     $("#btnName").on("click", function (event) {
         event.preventDefault();
         $(".modal").css("display", "block");
-    });
-
-    // close Modal
-    $(".close").on("click", function () {
-        $(".modal").css("display", "none");
     });
 
     // get value for name then close modal
@@ -325,7 +294,6 @@ $(document).ready(function () {
         event.preventDefault();
         if ($("#text-name").val().trim() !== "") {
             name = $("#text-name").val().trim();
-            // localStorage["myName"] = name;
             database.ref("/users").child(user_UID).update({ name: name });
             $(".modal").css("display", "none");
         }
@@ -337,13 +305,18 @@ $(document).ready(function () {
         $(".modal").css("display", "none");
     });
 
+    // close Modal when click 'X' close button
+    $(".close").on("click", function () {
+        $(".modal").css("display", "none");
+    });
+
+    // *** This code didn't work. Will figure out later. ***
     // // close Modal when clicked outside modal box
     // $(document).on("click", function (event) {
     //     if (event.target == modal) {
     //         $(".modal").css("display", "none");
     //     }
     // })
-
 
     //------ end ------
 });
